@@ -61,7 +61,7 @@ locate PACKAGE."
 
 ;;; Fire up package.el
 
-(setq package-enable-at-startup t)
+(setq package-enable-at-startup nil)
 (package-initialize)
 
 
