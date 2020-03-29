@@ -5,8 +5,8 @@
 
 (add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
 
-(let ((normal-gc-cons-threshold (* 20 1024 1024))
-      (init-gc-cons-threshold (* 128 1024 1024)))
+(setq normal-gc-cons-threshold (* 20 1024 1024))
+(let ((init-gc-cons-threshold (* 1024 1024 1024)))
   (setq gc-cons-threshold init-gc-cons-threshold)
   (add-hook 'emacs-startup-hook
            (lambda () (setq gc-cons-threshold normal-gc-cons-threshold))))
@@ -20,18 +20,6 @@
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 
 ;;--------------------------------------------------------------------------------
-
-;; (require 'package)
-;; (let* ((no-ssl (and (memq system-type '(windows-nt ms-dos))
-;;                     (not (gnutls-available-p))))
-;;        (proto (if no-ssl "http" "https")))
-;;   ;; Comment/uncomment these two lines to enable/disable MELPA and MELPA Stable as desired
-;;   (add-to-list 'package-archives (cons "melpa" (concat proto "://melpa.org/packages/")) t)
-;;   ;;(add-to-list 'package-archives (cons "melpa-stable" (concat proto "://stable.melpa.org/packages/")) t)
-;;   (when (< emacs-major-version 24)
-;;     ;; For important compatibility libraries like cl-lib
-;;     (add-to-list 'package-archives '("gnu" . (concat proto "://elpa.gnu.org/packages/")))))
-;; (package-initialize)
 
 (electric-pair-mode 1)
 (which-key-mode 1)
@@ -386,7 +374,6 @@
 (require 'pyim-basedict)
 (pyim-basedict-enable)
 
-(server-start)
 (add-hook 'python-mode-hook 'blacken-mode)
 (define-key python-mode-map (kbd "-") (lambda () (interactive) (insert-char #x5f)))
 (define-key python-mode-map (kbd "_") (lambda () (interactive) (insert-char #x2d)))
@@ -529,6 +516,11 @@ text))
       (lambda (&optional arg) "Keyboard macro." (interactive "p") (kmacro-exec-ring-item (quote ([5 2 67108896 5 134217744 6 134217847] 0 "%d")) arg)))
 
 (define-key youdao-dictionary-mode-map (kbd "i") 'youdao-extract)
+
+(fset 'collapse-head-whitespace
+      [?\C-  ?\C-a backspace backspace])
+
+(global-set-key (kbd "H-c") 'collapse-head-whitespace)
 
 (defun avy-yank-line (u)
   (interactive "P")
