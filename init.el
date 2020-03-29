@@ -28,42 +28,11 @@
 (setq key-chord-two-keys-delay 0.2)
 (require 'dap-gdb-lldb)
 (dap-gdb-lldb-setup)
-
-(require 'rust-mode)
-(require 'eldoc)
-(require 'racer)
-(require 'flycheck-rust)
-(require 'cargo)
 (require 'company)
 (require 'flycheck)
-(require 'lsp)
-(require 'company-lsp)
-(push 'company-lsp company-backends)
+(require 'eldoc)
 
-(add-hook 'rust-mode-hook 'lsp-mode)
-(add-hook 'rust-mode-hook 'company-mode)
-(add-hook 'rust-mode-hook 'auto-revert-mode)
-(add-hook 'rust-mode-hook 'electric-pair-mode)
-(add-hook 'rust-mode-hook 'cargo-minor-mode)
-(add-hook 'rust-mode-hook 'rust-enable-format-on-save)
-(add-hook 'racer-mode-hook 'eldoc-mode)
-(add-hook 'rust-mode-hook 'racer-mode)
-(add-hook 'rust-mode-hook 'flycheck-mode)
-(add-hook 'flycheck-mode-hook 'flycheck-rust-setup)
-
-(define-key rust-mode-map (kbd "-") (lambda () (interactive) (insert-char #x5f)))
-(define-key rust-mode-map (kbd "_") (lambda () (interactive) (insert-char #x2d)))
-(define-key rust-mode-map (kbd "C-c C-a") 'company-mode)
-(define-key rust-mode-map (kbd "H-r") 'lsp-rename)
-(define-key rust-mode-map (kbd "H-l") 'lsp-avy-lens)
-(define-key rust-mode-map (kbd "H-m H-l") 'lsp-lens-mode)
-
-;; is lense mode any good for rust??
-(rust-enable-format-on-save)
-(setq rust-match-angle-brackets nil)
-(setq exec-path(append exec-path '("~/.cargo/bin")))
-(setq racer-cmd "~/.cargo/bin/racer")
-(setq racer-rust-src-path "~/code/rust/src/")
+(require 'init-rust)
 
 ;; (use-package lsp-mode
 ;;   :commands lsp
@@ -71,8 +40,6 @@
 ;; (use-package lsp-ui)
 ;; don't like lsp, its too clever by half
 ;; warning about ptrace scope you unhardend this
-;; (keyboard-translate ?\- ?\-)
-;; (keyboard-translate ?\_ ?\_) saving because intersting syntax
 
 (setq backup-directory-alist '(("" . "~/.emacs.d/backup")))
 
