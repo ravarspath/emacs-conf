@@ -59,7 +59,6 @@
 
 
 (load-theme 'monokai t)
-;; (load-theme 'deeper-blue t)
 ;;super bright, but does handle org
 ;; (load-theme 'leuven t)
 
@@ -68,7 +67,6 @@
  '((ipython . t)
    (clojure . t)
    (J . t)
-   ;; other languages..
    ))
 
 (add-hook 'org-babel-after-execute-hook 'org-display-inline-images 'append)
@@ -140,8 +138,6 @@
 (add-to-list 'load-path "~/.emacs.d/customModes/")
 (add-to-list 'load-path "~/.emacs.d/addedPackages/")
 
-;; (require 'palette)
-
 (add-to-list 'load-path "~/.emacs.d/addedPackages/dired-hacks/")
 (add-to-list 'load-path "~/.emacs.d/addedPackages/i3-emacs/")
 (require 'dired-subtree)
@@ -171,10 +167,6 @@
 ;;also may want to use synctex? not sure what it does
 ;;also what the hell is latex-magic buffer
 
-
-
-
-
 (define-key dired-mode-map "i" 'dired-subtree-insert)
 (define-key dired-mode-map ";" 'dired-subtree-remove)
 
@@ -183,14 +175,6 @@
 (setq web-mode-engines-alist
       '(("django"    . "\\.html\\'"))
 )
-
-;; (use-package sunrise
-;;   :load-path "~/.emacs.d/addedPackages/sunrise-commander"
-;;   )
-;; (add-to-list 'auto-mode-alist '("\\.srvm\\'" . sunrise-virtual-mode))
-;; (global-set-key (kbd "C-x C-d") 'sunrise-cd)
-;; (define-key sunrise-mode-map (kbd "C-;") 'dired-subtree-remove)
-
 
 (require 'dired-x)
 (add-hook 'dired-load-hook
@@ -421,6 +405,25 @@
 (require 'q4)
 (global-set-key (kbd "H-0") 'q4/browse-board)
 (q4/toggle-thumbnailing-method)
+
+(setq ravar/elfeed-podcast-dir "~/Desktop/music/podcast/")
+;;TODO check mimetype first?
+(defun ravar/elfeed-play-enclosure-mpd ()
+  "Downloads the item in the enclosure and starts in playing in mpd using mpc"
+  (interactive)
+  (let* ((entry elfeed-show-entry)
+	 (enclosure-index (elfeed--get-enclosure-num
+			   "Enclosure to save" entry))
+         (url-enclosure (car (elt (elfeed-entry-enclosures entry)
+                                  (- enclosure-index 1))))
+	 (fname
+          (funcall elfeed-show-enclosure-filename-function
+                   entry url-enclosure)))
+    (start-process-shell-command
+     "play enclosure" nil
+     (format "cd %s; wget %s;mpc update; mpc search filename %s | mpc insert; mpc next "
+	     ravar/elfeed-podcast-dir url-enclosure fname))))
+(define-key elfeed-show-mode-map (kbd "o") 'ravar/elfeed-play-enclosure-mpd)
 
 (defun q4-override/wget-image (addr)
   "This will be attached to the mouse action for a button 
