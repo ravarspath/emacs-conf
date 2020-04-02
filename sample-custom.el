@@ -94,7 +94,7 @@
  '(org-todo-keywords (quote ((sequence "TODO" "DONE"))))
  '(package-selected-packages
    (quote
-    (exec-path-from-shell gnu-elpa-keyring-update fullframe seq say-what-im-doing lammps-mode key-chord wolfram-mode posframe youdao-dictionary anki-editor j-mode helm-lsp toml-mode lsp-ui company-lsp dap-mode general jedi tabbar circe deft blacken yasnippet-snippets racer pdf-tools free-keys ttl-mode company-auctex theme-magic caps-lock writegood-mode dictionary unicode-fonts color-theme-buffer-local elfeed github-search diminish dired-single nov disable-mouse solaire-mode helm-dictionary helm-descbinds bm flycheck-rust rainbow-mode paredit zprint-mode virtualenvwrapper webkit-color-picker metar noaa zotxt use-package transpose-frame test-simple ob-sagemath ob-ipython monky loc-changes load-relative keyfreq helm-flx god-mode direx cuda-mode)))
+    (multiple-cursors exec-path-from-shell gnu-elpa-keyring-update fullframe seq say-what-im-doing lammps-mode key-chord wolfram-mode posframe youdao-dictionary anki-editor j-mode helm-lsp toml-mode lsp-ui company-lsp dap-mode general jedi tabbar circe deft blacken yasnippet-snippets racer pdf-tools free-keys ttl-mode company-auctex theme-magic caps-lock writegood-mode dictionary unicode-fonts color-theme-buffer-local elfeed github-search diminish dired-single nov disable-mouse solaire-mode helm-dictionary helm-descbinds bm flycheck-rust rainbow-mode paredit zprint-mode virtualenvwrapper webkit-color-picker metar noaa zotxt use-package transpose-frame test-simple ob-sagemath ob-ipython monky loc-changes load-relative keyfreq helm-flx god-mode direx cuda-mode)))
  '(sunrise-visit-buffer-function (quote special-display-popup-frame))
  '(tabbar-background-color "gray11")
  '(tabbar-home-button (quote (("") "")))
