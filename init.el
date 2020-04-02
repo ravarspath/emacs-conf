@@ -1,5 +1,5 @@
 ;; "Inspired heavily" by https://github.com/purcell/emacs.d/blob/master/init.el
-;;TODO avy for i3 and i3 integration,dired hacks pull from github
+
 ;;--------------------------------------------------------------------------------
 ;; From here to close all comes from purcell
 
@@ -17,10 +17,16 @@
 (require 'init-elpa)      ;; Machinery for installing required packages
 (require 'init-exec-path) ;; Set up $PATH
 
-(setq custom-file (expand-file-name "sample-custom.el" user-emacs-directory))
+(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 
 ;;--------------------------------------------------------------------------------
 
+;;--------------------------------------------------------------------------------
+;; get some packages by git
+;;--------------------------------------------------------------------------------
+(require 'init-git)
+
+
 ;;--------------------------------------------------------------------------------
 ;; package "agnostic" configs
 ;;--------------------------------------------------------------------------------
@@ -68,11 +74,6 @@
 (global-set-key (kbd "H-=") 'text-scale-adjust)
 
 ;;--------------------------------------------------------------------------------
-;; get some packages by git
-;;--------------------------------------------------------------------------------
-(require 'init-git)
-
-;;--------------------------------------------------------------------------------
 ;; This has the packages that need to be install by user, or not applicable to
 ;; everyone, like i3 integration
 ;;--------------------------------------------------------------------------------
@@ -82,9 +83,14 @@
 ;; package soup
 ;;--------------------------------------------------------------------------------
 
+(git-ensure-package "https://github.com/Fuco1/dired-hacks.git" "dired-hacks")
+(require 'dired-subtree)
+(define-key dired-mode-map "i" 'dired-subtree-insert)
+(define-key dired-mode-map ";" 'dired-subtree-remove)
+
 (maybe-require-package 'key-chord)
 (setq key-chord-two-keys-delay 0.2)
-(maybe-require-package 'dap-gdb-lldb)
+(maybe-require-package 'dap-mode)
 (dap-gdb-lldb-setup)
 (maybe-require-package 'company)
 (maybe-require-package 'flycheck)
@@ -446,11 +452,9 @@
 ;;--------------------------------------------------------------------------------
 ;; Loads configuration from using the 'customize' interface
 ;;--------------------------------------------------------------------------------
+
+(require 'default-custom)
 (when (file-exists-p custom-file)
   (load custom-file))
-
-;;--------------------------------------------------------------------------------
-;; loads my keybinding
-;;--------------------------------------------------------------------------------
 
 (provide 'init)

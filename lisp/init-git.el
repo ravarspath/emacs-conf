@@ -6,8 +6,4 @@
       (shell-command (format "git clone '%s' ' %s'" url dir)))
     (add-to-list 'load-path dir)))
 
-
-(git-ensure-package "https://github.com/Fuco1/dired-hacks.git" "dired-hacks")
-(require 'dired-subtree)
-(define-key dired-mode-map "i" 'dired-subtree-insert)
-(define-key dired-mode-map ";" 'dired-subtree-remove)
+(provide 'init-git)

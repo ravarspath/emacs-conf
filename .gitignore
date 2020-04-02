@@ -29,3 +29,5 @@ ac-comphist.dat
 .python-environments/*
 .extension/*
 /TODO/
+/git
+/elpa-bak/

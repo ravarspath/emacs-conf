@@ -13,7 +13,9 @@
       (git-ensure-package "https://github.com/mhayashi1120/Emacs-langtool" "emacs-langtool")
       (setq langtool-language-tool-jar langtool-jar-dir)
       (require 'langtool)
-      (define-key markdown-mode-map (kbd "C-c C-v C-c") 'langtool-check)
-      (define-key markdown-mode-map (kbd "C-c C-v C-d") 'langtool-check-done)))
+      (with-eval-after-load "markdown-mode"
+	(progn
+	  (define-key markdown-mode-map (kbd "C-c C-v C-c") 'langtool-check)
+	  (define-key markdown-mode-map (kbd "C-c C-v C-d") 'langtool-check-done)))))
 
 (provide 'init-optional)
