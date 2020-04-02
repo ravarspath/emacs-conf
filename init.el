@@ -1,5 +1,5 @@
 ;; "Inspired heavily" by https://github.com/purcell/emacs.d/blob/master/init.el
-
+;;TODO avy for i3 and i3 integration,dired hacks pull from github
 ;;--------------------------------------------------------------------------------
 ;; From here to close all comes from purcell
 
@@ -71,12 +71,12 @@
 ;; package soup
 ;;--------------------------------------------------------------------------------
 
-(require 'key-chord)
+(maybe-require-package 'key-chord)
 (setq key-chord-two-keys-delay 0.2)
-(require 'dap-gdb-lldb)
+(maybe-require-package 'dap-gdb-lldb)
 (dap-gdb-lldb-setup)
-(require 'company)
-(require 'flycheck)
+(maybe-require-package 'company)
+(maybe-require-package 'flycheck)
 (require 'eldoc)
 
 (require 'init-rust)
@@ -128,7 +128,7 @@
 		       'org-src-do-key-sequence-at-code-block)))
 
 (add-hook 'python-mode-hook 'hs-minor-mode)
-(require 'circe)
+(maybe-require-package 'circe)
 (define-key circe-mode-map (kbd "M-n") "\C-u4\C-v")
 (define-key circe-mode-map (kbd "M-p") "\C-u4\M-v")
 (require 'man)
@@ -146,7 +146,7 @@
 (add-to-list 'load-path "~/.emacs.d/addedPackages/i3-emacs/")
 (require 'dired-subtree)
 
-(require 'latex)
+(maybe-require-package 'latex)
 ;; (require 'org-define-mode)
 ;; (add-hook 'org-mode-hook 'org-define-mode)
 ;; (require 'org-autobuild)
@@ -158,7 +158,7 @@
 (add-hook 'LaTeX-mode-hook 'flyspell-mode)
 (add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
 
-(require 'flymake)
+(maybe-require-package 'flymake)
 (add-hook 'LaTeX-mode-hook 'flymake-mode)
 (define-key flymake-mode-map (kbd "C-c C-,") 'flymake-goto-next-error)
 (define-key flymake-mode-map (kbd "C-c C-.") 'flymake-goto-prev-error)
@@ -174,19 +174,19 @@
 (define-key dired-mode-map "i" 'dired-subtree-insert)
 (define-key dired-mode-map ";" 'dired-subtree-remove)
 
-(require 'web-mode)
+(maybe-require-package 'web-mode)
 (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
 (setq web-mode-engines-alist
       '(("django"    . "\\.html\\'"))
 )
 
-(require 'dired-x)
+(maybe-require-package 'dired-x)
 (add-hook 'dired-load-hook
 	  (function (lambda () (load "dired-x"))))
 
 (add-hook 'dired-mode-hook (lambda () (dired-omit-mode)))
 
-(require 'flyspell)
+(maybe-require-package 'flyspell)
 (add-hook 'markdown-mode-hook 'flyspell-mode)
 (define-key flyspell-mode-map (kbd "C-c C-d") 'ispell-word)
 
@@ -194,7 +194,7 @@
 (i3-one-window-per-frame-mode-on)
 ;; (i3-advice-visible-frame-list-on)
 
-(require 'pdf-tools)
+(maybe-require-package 'pdf-tools)
 (define-key pdf-view-mode-map (kbd "H") 'pdf-annot-add-highlight-markup-annotation)
 (define-key pdf-view-mode-map (kbd "t") 'pdf-annot-add-text-annotation)
 (define-key pdf-view-mode-map (kbd "d") 'pdf-annot-delete)
@@ -202,7 +202,7 @@
 (pdf-loader-install)
 (add-hook 'pdf-view-mode-hook (lambda () (linum-mode 0)))
 
-(require 'keyfreq)
+(maybe-require-package 'keyfreq)
 (keyfreq-mode 1)
 (keyfreq-autosave-mode 1)
 
@@ -210,16 +210,16 @@
   (require 'cl))
 
 (setq helm-command-prefix-key "<C-return>")
-(require 'helm-config)
+(maybe-require-package 'helm-config)
 (helm-mode 1)
 (define-key helm-map (kbd "C-z")  'helm-select-action)
 (define-key helm-find-files-map (kbd "C-<backspace>") 'backward-kill-word)
 (define-key helm-read-file-map (kbd "C-<backspace>") 'backward-kill-word)
 (define-key helm-find-files-map (kbd "<tab>") 'ignore ) 
 (define-key helm-read-file-map (kbd "<tab>") 'ignore)
-(require 'helm-descbinds)
+(maybe-require-package 'helm-descbinds)
 (helm-descbinds-mode)
-(require 'helm-dictionary)
+(maybe-require-package 'helm-dictionary)
 (define-key helm-command-map (kbd "d") 'helm-dictionary)
 (define-key helm-command-map (kbd "C-s") 'helm-occur)
 (define-key helm-command-map (kbd "C-g") 'helm-grep-do-git-grep)
@@ -228,7 +228,7 @@
 (require 'use-package)
 
 
-(require 'markdown-mode)
+(maybe-require-package 'markdown-mode)
 (add-hook 'markdown-mode-hook 'visual-line-mode)
 (define-key markdown-mode-map "\M-n" "\C-u4\C-v")
 (define-key markdown-mode-map "\M-p" "\C-u4\M-v")
@@ -254,17 +254,11 @@
 (define-key org-mode-map (kbd "H-l") 'rorg-double-link)
 ;; (pyvenv-activate "~/envs/benv")
 
-
-;; (add-hook 'after-init-hook 'global-flycheck-mode)
-;; flycheck is nice, but really agressive, I don't want it for hacks
-;;hacks like .emacs files
-
-
-(use-package projectile
-  :ensure t
-  :config
-  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
-  (projectile-mode +1))
+;; (use-package projectile
+;;   :ensure t
+;;   :config
+;;   (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+;;   (projectile-mode +1))
 
 
 (calendar)
@@ -276,18 +270,18 @@
 (define-key calendar-mode-map "l" 'calendar-backward-week)
 (define-key calendar-mode-map ";" 'calendar-forward-day)
 
-(require 'pyim)
-(require 'pyim-basedict)
+(maybe-require-package 'pyim)
+(maybe-require-package 'pyim-basedict)
 (pyim-basedict-enable)
 
 (add-hook 'python-mode-hook 'blacken-mode)
 (define-key python-mode-map (kbd "-") (lambda () (interactive) (insert-char #x5f)))
 (define-key python-mode-map (kbd "_") (lambda () (interactive) (insert-char #x2d)))
 
-(require 'ob-clojure)
+(maybe-require-package 'ob-clojure)
 (setq org-babel-clojure-backend 'cider)
-(require 'cider)
-(require 'paredit)
+(maybe-require-package 'cider)
+(maybe-require-package 'paredit)
 (add-hook 'clojure-mode-hook 'enable-paredit-mode)
 (define-key paredit-mode-map (kbd "C-j") nil)
 (define-key cider-mode-map (kbd "C-c C-e") nil)
@@ -304,20 +298,20 @@
 
 (set-fontset-font (frame-parameter nil 'font) 'han "xft:-GOOG-Noto Sans CJK KR-normal-normal-normal-*-16-*-*-*-*-0-iso10646-1")
 
-(use-package nov
-  :bind (:map nov-mode-map
-	      ("C-d" . youdao-dictionary-search-at-point)
-	      ("d" . youdao-dictionary-search-at-point)
-	      ("j" . backward-char)
-	      (";" . forward-char)
-	      ("k" . next-line)
-	      ("l" . previous-line)
-	      ("g" . keyboard-quit)
-	      ("n" . nov-scroll-up)
-	      ("p" . nov-scroll-down)
-	      ("SPC" . set-mark-command)
-	      ("q" . nil )
-	      ("C-q" . quit-window)))
+(maybe-require-package 'nov)
+
+(define-key nov-mode-map (kbd "C-d") 'youdao-dictionary-search-at-point)
+(define-key nov-mode-map (kbd "d") 'dictionary-search-at-point)
+(define-key nov-mode-map (kbd "j") 'backward-char)
+(define-key nov-mode-map (kbd ";") 'forward-char)
+(define-key nov-mode-map (kbd "k") 'line)
+(define-key nov-mode-map (kbd "l") 'previous-line)
+(define-key nov-mode-map (kbd "g") 'keyboard-quit)
+(define-key nov-mode-map (kbd "n") 'scroll-up)
+(define-key nov-mode-map (kbd "p") 'scroll-down)
+(define-key nov-mode-map (kbd "SPC") 'mark-command)
+(define-key nov-mode-map (kbd "q") 'nil )
+(define-key nov-mode-map (kbd "C-q") 'window)
 
 
 (add-to-list 'load-path "~/.emacs.d/addedPackages/Emacs-langtool")
@@ -329,21 +323,21 @@
 ;; (add-to-list 'load-path "~/.emacs.d/addedPackages/ibus-el-0.3.2")
 ;; (require 'ibus)
 
-(require 'elfeed)
+(maybe-require-package 'elfeed)
 (define-key elfeed-show-mode-map (kbd "<return>") 'shr-copy-url)
 (define-key elfeed-search-mode-map (kbd "C-l") 'elfeed-update)
 (define-key elfeed-search-mode-map (kbd "k") 'next-line)
 (define-key elfeed-search-mode-map (kbd "l") 'previous-line)
 ;; press S too change filter
 
-(require 'tabbar)
+(maybe-require-package 'tabbar)
 (add-hook 'tabbar-mode-hook (lambda () (interactive) (remove-hook 'kill-buffer-hook 'tabbar-buffer-track-killed)))
 (remove-hook 'kill-buffer-hook 'tabbar-buffer-track-killed)
 
-(require 'youdao-dictionary)
+(maybe-require-package 'youdao-dictionary)
 
 (add-to-list 'load-path "~/.emacs.d/addedPackages/q4")
-(require 'q4)
+(maybe-require-package 'q4)
 (q4/toggle-thumbnailing-method)
 (define-key q4-mode-map (kbd "f") 'q4/point-to-next-post)
 (define-key q4-mode-map (kbd "j") 'q4/point-to-next-post)
@@ -363,7 +357,7 @@
 
 (yas-global-mode)
 
-(require 'diminish)
+(maybe-require-package 'diminish)
 (diminish 'eldoc-mode)
 (diminish 'racer-mode)
 (diminish 'disable-mouse-mode)
@@ -418,7 +412,7 @@
 (global-set-key (kbd "C-c C-b C-n") 'bm-next)
 (global-set-key (kbd "C-c C-b C-p") 'bm-previous)
 
-(require 'caps-lock)
+(maybe-require-package 'caps-lock)
 (global-set-key (kbd "M-c") 'caps-lock-mode)
 
 (global-set-key (kbd "C-s-;") 'tabbar-forward-tab)
