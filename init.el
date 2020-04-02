@@ -1,5 +1,5 @@
 ;; "Inspired heavily" by https://github.com/purcell/emacs.d/blob/master/init.el
-
+;;TODO move mu to git dl
 ;;--------------------------------------------------------------------------------
 ;; From here to close all comes from purcell
 
@@ -21,6 +21,9 @@
 
 ;;--------------------------------------------------------------------------------
 
+(maybe-require-package 'use-package)
+(require 'use-package)
+
 ;;--------------------------------------------------------------------------------
 ;; get some packages by git
 ;;--------------------------------------------------------------------------------
@@ -30,8 +33,8 @@
 ;;--------------------------------------------------------------------------------
 ;; package "agnostic" configs
 ;;--------------------------------------------------------------------------------
+
 (electric-pair-mode 1)
-(which-key-mode 1)
 
 (global-linum-mode)
 (defun buffer-too-big-p ()
@@ -42,17 +45,6 @@
             ;; turn off `linum-mode' when there are more than 5000 lines
             (if (buffer-too-big-p) (linum-mode -1))))
 (linum-mode t)
-
-(load-theme 'monokai t)
-;;super bright, but does handle org
-;; (load-theme 'leuven t)
-
-(org-babel-do-load-languages
- 'org-babel-load-languages
- '((ipython . t)
-   (clojure . t)
-   (J . t)
-   ))
 
 (desktop-save-mode 1)
 (auto-revert-mode)
@@ -83,6 +75,18 @@
 ;; package soup
 ;;--------------------------------------------------------------------------------
 
+(maybe-require-package 'unicode-fonts)
+(maybe-require-package 'with-editor)
+(maybe-require-package 'yasnippet)
+(maybe-require-package 'monokai-theme)
+(load-theme 'monokai t)
+;;super bright, but does handle org
+;; (load-theme 'leuven t)
+
+(maybe-require-package 'which-key)
+(which-key-mode 1)
+
+(maybe-require-package 'dash)
 (git-ensure-package "https://github.com/Fuco1/dired-hacks.git" "dired-hacks")
 (require 'dired-subtree)
 (define-key dired-mode-map "i" 'dired-subtree-insert)
@@ -91,7 +95,6 @@
 (maybe-require-package 'key-chord)
 (setq key-chord-two-keys-delay 0.2)
 (maybe-require-package 'dap-mode)
-(dap-gdb-lldb-setup)
 (maybe-require-package 'company)
 (maybe-require-package 'flycheck)
 (require 'eldoc)
@@ -120,13 +123,22 @@
 (when (fboundp 'imagemagick-register-types)
   (imagemagick-register-types))
 
+(maybe-require-package 'ob-ipython)
+(maybe-require-package 'clojure-mode)
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((ipython . t)
+   (clojure . t)
+   (J . t)
+   ))
+
 (add-hook 'org-babel-after-execute-hook 'org-display-inline-images 'append)
 (setq org-confirm-babel-evaluate nil)
 (define-key org-mode-map (kbd "H-[") 'org-agenda)
 ;;latex drives me up a wall
 (key-chord-define org-mode-map "qi" '(lambda () (interactive) (insert "\\")))
 
-(maybe-require-package jedi)
+(maybe-require-package 'jedi)
 (add-hook 'python-mode-hook 'jedi:setup)
 (setq jedi:complete-on-dot t)
 (setq jedi:setup-keys t)
@@ -147,8 +159,7 @@
 
 (add-hook 'python-mode-hook 'hs-minor-mode)
 (maybe-require-package 'circe)
-(define-key circe-mode-map (kbd "M-n") "\C-u4\C-v")
-(define-key circe-mode-map (kbd "M-p") "\C-u4\M-v")
+
 (require 'man)
 (define-key Man-mode-map (kbd "M-n") "\C-u4\C-v")
 (define-key Man-mode-map (kbd "M-p") "\C-u4\M-v")
@@ -160,7 +171,7 @@
 
 ;; (add-to-list 'load-path "~/.emacs.d/customModes/")
 
-(maybe-require-package 'latex)
+(maybe-require-package 'auctex)
 ;; (require 'org-define-mode)
 ;; (add-hook 'org-mode-hook 'org-define-mode)
 ;; (require 'org-autobuild)
@@ -174,8 +185,11 @@
 
 (maybe-require-package 'flymake)
 (add-hook 'LaTeX-mode-hook 'flymake-mode)
-(define-key flymake-mode-map (kbd "C-c C-,") 'flymake-goto-next-error)
-(define-key flymake-mode-map (kbd "C-c C-.") 'flymake-goto-prev-error)
+(use-package flymake-mode
+  :bind (:map flymake-mode-map
+	      ("C-c C-," . 'flymake-goto-next-error)
+	      ("C-c C-." . 'flymake-goto-prev-error)))
+
 ;; (add-hook 'LaTeX-mode-hook 'turn-on-reftex)
 ;; (setq reftex-plug-into-AUCTeX t)
 ;; setup for reftex to handle refrences
@@ -199,14 +213,7 @@
 
 (maybe-require-package 'flyspell)
 (add-hook 'markdown-mode-hook 'flyspell-mode)
-(define-key flyspell-mode-map (kbd "C-c C-d") 'ispell-word)
-
-
 (maybe-require-package 'pdf-tools)
-(define-key pdf-view-mode-map (kbd "H") 'pdf-annot-add-highlight-markup-annotation)
-(define-key pdf-view-mode-map (kbd "t") 'pdf-annot-add-text-annotation)
-(define-key pdf-view-mode-map (kbd "d") 'pdf-annot-delete)
-(define-key pdf-view-mode-map (kbd "M-SPC") 'pdf-view-scroll-down-or-previous-page)
 (pdf-loader-install)
 (add-hook 'pdf-view-mode-hook (lambda () (linum-mode 0)))
 
@@ -219,22 +226,19 @@
 
 (setq helm-command-prefix-key "<C-return>")
 (maybe-require-package 'helm-config)
+(maybe-require-package 'helm-descbinds)
+(maybe-require-package 'helm-dictionary)
 (helm-mode 1)
 (define-key helm-map (kbd "C-z")  'helm-select-action)
 (define-key helm-find-files-map (kbd "C-<backspace>") 'backward-kill-word)
 (define-key helm-read-file-map (kbd "C-<backspace>") 'backward-kill-word)
 (define-key helm-find-files-map (kbd "<tab>") 'ignore ) 
 (define-key helm-read-file-map (kbd "<tab>") 'ignore)
-(maybe-require-package 'helm-descbinds)
 (helm-descbinds-mode)
-(maybe-require-package 'helm-dictionary)
 (define-key helm-command-map (kbd "d") 'helm-dictionary)
 (define-key helm-command-map (kbd "C-s") 'helm-occur)
 (define-key helm-command-map (kbd "C-g") 'helm-grep-do-git-grep)
 ;;TODO integrate helm with helpful??
-
-(require 'use-package)
-
 
 (maybe-require-package 'markdown-mode)
 (add-hook 'markdown-mode-hook 'visual-line-mode)
@@ -256,6 +260,7 @@
 (define-key q4-mode-map (kbd "j") 'q4/point-to-next-post)
 
 (maybe-require-package 'avy)
+
 (define-key org-mode-map (kbd "C-j") 'avy-goto-word-or-subword-1)
 (define-key LaTeX-mode-map (kbd "C-j") 'avy-goto-word-or-subword-1)
 (define-key flyspell-mode-map (kbd "C-;") 'avy-goto-char)
@@ -298,6 +303,7 @@
 (define-key paredit-mode-map (kbd "C-j") nil)
 (define-key cider-mode-map (kbd "C-c C-e") nil)
 
+(maybe-require-package hl-todo)
 (global-hl-todo-mode 1)
 (define-key hl-todo-mode-map (kbd "C-c C-h n") 'hl-todo-next)
 (define-key hl-todo-mode-map (kbd "C-c C-h p") 'hl-todo-previous)
@@ -312,28 +318,10 @@
 
 (maybe-require-package 'nov)
 
-(define-key nov-mode-map (kbd "C-d") 'youdao-dictionary-search-at-point)
-(define-key nov-mode-map (kbd "d") 'dictionary-search-at-point)
-(define-key nov-mode-map (kbd "j") 'backward-char)
-(define-key nov-mode-map (kbd ";") 'forward-char)
-(define-key nov-mode-map (kbd "k") 'line)
-(define-key nov-mode-map (kbd "l") 'previous-line)
-(define-key nov-mode-map (kbd "g") 'keyboard-quit)
-(define-key nov-mode-map (kbd "n") 'scroll-up)
-(define-key nov-mode-map (kbd "p") 'scroll-down)
-(define-key nov-mode-map (kbd "SPC") 'mark-command)
-(define-key nov-mode-map (kbd "q") 'nil )
-(define-key nov-mode-map (kbd "C-q") 'window)
-
 ;; (add-to-list 'load-path "~/.emacs.d/addedPackages/ibus-el-0.3.2")
 ;; (require 'ibus)
 
 (maybe-require-package 'elfeed)
-(define-key elfeed-show-mode-map (kbd "<return>") 'shr-copy-url)
-(define-key elfeed-search-mode-map (kbd "C-l") 'elfeed-update)
-(define-key elfeed-search-mode-map (kbd "k") 'next-line)
-(define-key elfeed-search-mode-map (kbd "l") 'previous-line)
-;; press S too change filter
 
 (maybe-require-package 'tabbar)
 (add-hook 'tabbar-mode-hook (lambda () (interactive) (remove-hook 'kill-buffer-hook 'tabbar-buffer-track-killed)))
@@ -371,6 +359,43 @@
 (put 'set-goal-column 'disabled nil)
 
 
+(use-package nov-mode
+  :bind (:map nov-mode-map
+              ("C-d" . youdao-dictionary-search-at-point)
+	      ("d" . dictionary-search-at-point)
+	      ("j" . backward-char)
+	      (";" . forward-char)
+	      ("k" . line)
+	      ("l" . previous-line)
+	      ("g" . keyboard-quit)
+	      ("n" . scroll-up)
+	      ("p" . scroll-down)
+	      ("SPC" . mark-command)
+	      ("q" . nil )
+	      ("C-q" . quit-window)))
+
+(use-package elfeed-mode
+  :bind (:map elfeed-show-mode-map
+              ("<return>" . shr-copy-url)
+	      ("C-l" . elfeed-update)
+	      ("k" . next-line)
+	      ("l" . previous-line)))
+
+(use-package flyspell-mode
+  :bind (:map flyspell-mode-map
+              ("C-c C-d" . ispell-word)))
+
+(use-package pdf-tools
+  :bind (:map pdf-view-mode-map
+              ("H" . pdf-annot-add-highlight-markup-annotation)
+	      ("t" . pdf-annot-add-text-annotation)
+	      ("d" . pdf-annot-delete)
+	      ("M-SPC" . pdf-view-scroll-down-or-previous-page)))
+
+(use-package circe-mode
+  :bind (:map circe-mode-map
+              ("M-n" . "\C-u4\C-v")
+	      ( "M-p" . "\C-u4\M-v")))
 ;;--------------------------------------------------------------------------------
 ;; global binds
 ;;--------------------------------------------------------------------------------

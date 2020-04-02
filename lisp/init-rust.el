@@ -1,13 +1,15 @@
 
-(require 'rust-mode)
+(maybe-require-package 'rust-mode)
 
-(require 'racer)
-(require 'flycheck-rust)
-(require 'cargo)
+(maybe-require-package 'racer)
+(maybe-require-package 'flycheck-rust)
+(maybe-require-package 'cargo)
 
-(require 'lsp)
+(maybe-require-package 'lsp)
+(maybe-require-package 'company-lsp)
+(maybe-require-package 'toml-mode)
+
 (require 'company-lsp)
-
 (push 'company-lsp company-backends)
 
 (add-hook 'rust-mode-hook 'lsp-mode)
@@ -23,15 +25,19 @@
 
 ;; (keyboard-translate ?\- ?\-)
 ;; (keyboard-translate ?\_ ?\_) saving because intersting function
-(define-key rust-mode-map (kbd "-") (lambda () (interactive) (insert-char #x5f)))
-(define-key rust-mode-map (kbd "_") (lambda () (interactive) (insert-char #x2d)))
-(define-key rust-mode-map (kbd "C-c C-a") 'company-mode)
-(define-key rust-mode-map (kbd "H-r") 'lsp-rename)
-(define-key rust-mode-map (kbd "H-l") 'lsp-avy-lens)
-(define-key rust-mode-map (kbd "H-m H-l") 'lsp-lens-mode)
+(use-package rust-mode
+  :bind (:map rust-mode-map
+	      ("-" . (lambda () (interactive) (insert-char #x5f)))
+	      ("_" . (lambda () (interactive) (insert-char #x2d)))
+	      ("C-c C-a" . company-mode))
+  ;;doesn't play nice hyper key
+  :config (progn
+	    (define-key rust-mode-map (kbd "H-r") lsp-rename)
+	    (define-key rust-mode-map (kbd "H-l") lsp-avy-lens)
+	    (define-key rust-mode-map (kbd "H-m H-l") lsp-lens-mode)))
 
+(setq rust-format-one-save t)
 ;; is lens mode any good for rust??
-(rust-enable-format-on-save)
 (setq rust-match-angle-brackets nil)
 (setq exec-path(append exec-path '("~/.cargo/bin")))
 (setq racer-cmd "~/.cargo/bin/racer")
