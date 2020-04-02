@@ -89,6 +89,12 @@
 (fset 'collapse-head-whitespace
       [?\C-  ?\C-a backspace backspace])
 
+;;turns 
+;;( progn
+;;     (some expression))
+;;into
+;;( progn (some expression))
+
 ;;--------------------------------------------------------------------------------
 ;; macro to copy the for a word pinyin out of youdao 
 ;;--------------------------------------------------------------------------------

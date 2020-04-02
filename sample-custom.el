@@ -94,7 +94,7 @@
  '(org-todo-keywords (quote ((sequence "TODO" "DONE"))))
  '(package-selected-packages
    (quote
-    (multiple-cursors exec-path-from-shell gnu-elpa-keyring-update fullframe seq)))
+    (multiple-cursors diminish exec-path-from-shell gnu-elpa-keyring-update fullframe seq)))
  '(tabbar-background-color "gray11")
  '(tabbar-home-button (quote (("") "")))
  '(tabbar-mode t nil (tabbar))

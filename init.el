@@ -68,6 +68,17 @@
 (global-set-key (kbd "H-=") 'text-scale-adjust)
 
 ;;--------------------------------------------------------------------------------
+;; get some packages by git
+;;--------------------------------------------------------------------------------
+(require 'init-git)
+
+;;--------------------------------------------------------------------------------
+;; This has the packages that need to be install by user, or not applicable to
+;; everyone, like i3 integration
+;;--------------------------------------------------------------------------------
+(require 'init-optional)
+
+;;--------------------------------------------------------------------------------
 ;; package soup
 ;;--------------------------------------------------------------------------------
 
@@ -109,6 +120,7 @@
 ;;latex drives me up a wall
 (key-chord-define org-mode-map "qi" '(lambda () (interactive) (insert "\\")))
 
+(maybe-require-package jedi)
 (add-hook 'python-mode-hook 'jedi:setup)
 (setq jedi:complete-on-dot t)
 (setq jedi:setup-keys t)
@@ -135,16 +147,12 @@
 (define-key Man-mode-map (kbd "M-n") "\C-u4\C-v")
 (define-key Man-mode-map (kbd "M-p") "\C-u4\M-v")
 
+(maybe-require-package 'zotxt)
 (eval-after-load "zotxt"
   '(setq zotxt-default-bibliography-style "mkbehr-short"))
 (add-hook 'org-mode-hook 'org-zotxt-mode)
 
-(add-to-list 'load-path "~/.emacs.d/customModes/")
-(add-to-list 'load-path "~/.emacs.d/addedPackages/")
-
-(add-to-list 'load-path "~/.emacs.d/addedPackages/dired-hacks/")
-(add-to-list 'load-path "~/.emacs.d/addedPackages/i3-emacs/")
-(require 'dired-subtree)
+;; (add-to-list 'load-path "~/.emacs.d/customModes/")
 
 (maybe-require-package 'latex)
 ;; (require 'org-define-mode)
@@ -171,9 +179,6 @@
 ;;also may want to use synctex? not sure what it does
 ;;also what the hell is latex-magic buffer
 
-(define-key dired-mode-map "i" 'dired-subtree-insert)
-(define-key dired-mode-map ";" 'dired-subtree-remove)
-
 (maybe-require-package 'web-mode)
 (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
 (setq web-mode-engines-alist
@@ -190,9 +195,6 @@
 (add-hook 'markdown-mode-hook 'flyspell-mode)
 (define-key flyspell-mode-map (kbd "C-c C-d") 'ispell-word)
 
-(require 'i3-integration)
-(i3-one-window-per-frame-mode-on)
-;; (i3-advice-visible-frame-list-on)
 
 (maybe-require-package 'pdf-tools)
 (define-key pdf-view-mode-map (kbd "H") 'pdf-annot-add-highlight-markup-annotation)
@@ -239,11 +241,15 @@
 ;; (define-key god-local-mode-map "i" 'god-local-mode)
 ;; (define-key god-local-mode-map "z" 'repeat)
 
-(use-package avy
-  :load-path "~/Desktop/code/custemacs/avy"
-  )
 
 
+(git-ensure-package "https://github.com/rosbo018/q4.git" "q4")
+(maybe-require-package 'q4)
+(q4/toggle-thumbnailing-method)
+(define-key q4-mode-map (kbd "f") 'q4/point-to-next-post)
+(define-key q4-mode-map (kbd "j") 'q4/point-to-next-post)
+
+(maybe-require-package 'avy)
 (define-key org-mode-map (kbd "C-j") 'avy-goto-word-or-subword-1)
 (define-key LaTeX-mode-map (kbd "C-j") 'avy-goto-word-or-subword-1)
 (define-key flyspell-mode-map (kbd "C-;") 'avy-goto-char)
@@ -313,13 +319,6 @@
 (define-key nov-mode-map (kbd "q") 'nil )
 (define-key nov-mode-map (kbd "C-q") 'window)
 
-
-(add-to-list 'load-path "~/.emacs.d/addedPackages/Emacs-langtool")
-(setq langtool-language-tool-jar "~/software/LanguageTool-4.6/languagetool-commandline.jar")
-(require 'langtool)
-(define-key markdown-mode-map (kbd "C-c C-v C-c") 'langtool-check)
-(define-key markdown-mode-map (kbd "C-c C-v C-d") 'langtool-check-done)
-
 ;; (add-to-list 'load-path "~/.emacs.d/addedPackages/ibus-el-0.3.2")
 ;; (require 'ibus)
 
@@ -335,12 +334,6 @@
 (remove-hook 'kill-buffer-hook 'tabbar-buffer-track-killed)
 
 (maybe-require-package 'youdao-dictionary)
-
-(add-to-list 'load-path "~/.emacs.d/addedPackages/q4")
-(maybe-require-package 'q4)
-(q4/toggle-thumbnailing-method)
-(define-key q4-mode-map (kbd "f") 'q4/point-to-next-post)
-(define-key q4-mode-map (kbd "j") 'q4/point-to-next-post)
 
 ;; (add-to-list 'load-path "~/Desktop/code/newsr/")
 ;; (require 'newsr)
