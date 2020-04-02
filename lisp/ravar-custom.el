@@ -129,8 +129,9 @@
                    entry url-enclosure)))
     (start-process-shell-command
      "play enclosure" nil
-     (format "cd %s; wget %s;mpc update; mpc search filename %s | mpc insert; mpc next "
-	     ravar/elfeed-podcast-dir url-enclosure fname))))
+     (format "cd %s; wget %s;mpc update; mpc search filename %s | mpc insert; 
+mpc searchplay filename %s "
+	     ravar/elfeed-podcast-dir url-enclosure fname fname))))
 
 ;;--------------------------------------------------------------------------------
 ;; used to allow quick saving of images from q4

@@ -1,12 +1,12 @@
 
-(maybe-require-package 'rust-mode)
+(require 'rust-mode)
 
-(maybe-require-package 'racer)
-(maybe-require-package 'flycheck-rust)
-(maybe-require-package 'cargo)
+(require 'racer)
+(require 'flycheck-rust)
+(require 'cargo)
 
-(maybe-require-package 'lsp)
-(maybe-require-package 'company-lsp)
+(require 'lsp)
+(require 'company-lsp)
 
 (push 'company-lsp company-backends)
 

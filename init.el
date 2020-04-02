@@ -57,6 +57,15 @@
 
 (fset 'yes-or-no-p 'y-or-n-p)
 (show-paren-mode 1)
+
+;;makes the init file prettier
+(font-lock-add-keywords 'emacs-lisp-mode '(("(\\(maybe-require-package\\)\\_>[ 	']*\\(\\(?:\\sw\\|\\s_\\|\\\\.\\)+\\)?"
+			       (1 font-lock-keyword-face)
+			       (2 font-lock-constant-face ))))
+
+(set-face-attribute 'default nil :height 85)
+(global-set-key (kbd "H--") 'text-scale-adjust)
+(global-set-key (kbd "H-=") 'text-scale-adjust)
 
 ;;--------------------------------------------------------------------------------
 ;; package soup
@@ -200,6 +209,7 @@
 (eval-when-compile
   (require 'cl))
 
+(setq helm-command-prefix-key "<C-return>")
 (require 'helm-config)
 (helm-mode 1)
 (define-key helm-map (kbd "C-z")  'helm-select-action)
@@ -248,8 +258,6 @@
 ;; (add-hook 'after-init-hook 'global-flycheck-mode)
 ;; flycheck is nice, but really agressive, I don't want it for hacks
 ;;hacks like .emacs files
-
-(set-face-attribute 'default nil :height 85)
 
 
 (use-package projectile
@@ -337,6 +345,8 @@
 (add-to-list 'load-path "~/.emacs.d/addedPackages/q4")
 (require 'q4)
 (q4/toggle-thumbnailing-method)
+(define-key q4-mode-map (kbd "f") 'q4/point-to-next-post)
+(define-key q4-mode-map (kbd "j") 'q4/point-to-next-post)
 
 ;; (add-to-list 'load-path "~/Desktop/code/newsr/")
 ;; (require 'newsr)
@@ -377,7 +387,6 @@
 (global-set-key "\M-n" "\C-u4\C-v")
 (global-set-key "\M-p" "\C-u4\M-v")
 
-;;(font-lock-add-keywords 'emacs-lisp '(("maybe-require-package" . 1)))
 (maybe-require-package 'multiple-cursors)
 (global-set-key (kbd "C-c m c") 'mc/edit-lines)
 (global-set-key (kbd "<M-right>") 'mc/mark-next-like-this)
