@@ -136,7 +136,7 @@
     (start-process-shell-command
      "play enclosure" nil
      (format "cd %s; wget %s;mpc update; mpc search filename %s | mpc insert; 
-mpc searchplay filename %s "
+mpc next; mpc play "
 	     ravar/elfeed-podcast-dir url-enclosure fname fname))))
 
 ;;--------------------------------------------------------------------------------
