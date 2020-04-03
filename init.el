@@ -1,5 +1,5 @@
 ;; "Inspired heavily" by https://github.com/purcell/emacs.d/blob/master/init.el
-;;TODO move mu to git dl
+
 ;;--------------------------------------------------------------------------------
 ;; From here to close all comes from purcell
 
@@ -110,7 +110,7 @@
 
 (setq backup-directory-alist '(("" . "~/.emacs.d/backup")))
 
-(add-to-list 'load-path "~/software/mu/mu4e")
+(git-ensure-package "https://github.com/djcb/mu/tree/master/mu4e.git" "mu")
 (require 'mu4e)
 (setq mu4e-maildir "~/maildir")
 (define-key mu4e-view-mode-map (kbd "C-o") 'org-open-at-point)
