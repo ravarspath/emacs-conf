@@ -110,12 +110,8 @@
 
 (setq backup-directory-alist '(("" . "~/.emacs.d/backup")))
 
-(git-ensure-package "https://github.com/djcb/mu/tree/master/mu4e.git" "mu")
-(require 'mu4e)
-(setq mu4e-maildir "~/maildir")
-(define-key mu4e-view-mode-map (kbd "C-o") 'org-open-at-point)
-(require 'mu4e-contrib)
-(setq mu4e-html2text-command 'mu4e-shr2text)
+
+;;this is set to make mu4e legible if you ever use it
 (setq shr-color-visible-luminance-min 60)
 (setq shr-color-visible-distance-min 5)
 (setq shr-use-colors nil)
