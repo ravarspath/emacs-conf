@@ -73,7 +73,7 @@
 
 ;;--------------------------------------------------------------------------------
 ;; package soup
-;;--------------------------------------------------------------------------------
+;;-------------------------------------------------------------------------------- 
 
 (maybe-require-package 'unicode-fonts)
 (maybe-require-package 'with-editor)
@@ -185,7 +185,7 @@
 
 (maybe-require-package 'flymake)
 (add-hook 'LaTeX-mode-hook 'flymake-mode)
-(use-package flymake-mode
+(use-package flymake
   :bind (:map flymake-mode-map
 	      ("C-c C-," . 'flymake-goto-next-error)
 	      ("C-c C-." . 'flymake-goto-prev-error)))
@@ -228,6 +228,8 @@
 (maybe-require-package 'helm-config)
 (maybe-require-package 'helm-descbinds)
 (maybe-require-package 'helm-dictionary)
+(require 'helm)
+(require 'helm-config)
 (helm-mode 1)
 (define-key helm-map (kbd "C-z")  'helm-select-action)
 (define-key helm-find-files-map (kbd "C-<backspace>") 'backward-kill-word)
@@ -253,17 +255,10 @@
 
 
 
-(git-ensure-package "https://github.com/rosbo018/q4.git" "q4")
-(maybe-require-package 'q4)
-(q4/toggle-thumbnailing-method)
-(define-key q4-mode-map (kbd "f") 'q4/point-to-next-post)
-(define-key q4-mode-map (kbd "j") 'q4/point-to-next-post)
+(git-ensure-package "https://github.com/ravarspath/q4" "q4")
 
 (maybe-require-package 'avy)
-
 (define-key org-mode-map (kbd "C-j") 'avy-goto-word-or-subword-1)
-(define-key LaTeX-mode-map (kbd "C-j") 'avy-goto-word-or-subword-1)
-(define-key flyspell-mode-map (kbd "C-;") 'avy-goto-char)
 (define-key lisp-interaction-mode-map (kbd "C-j") 'avy-goto-word-or-subword-1)
 (define-key lisp-interaction-mode-map (kbd "C-M-j") 'eval-print-last-sexp)
 
@@ -278,14 +273,14 @@
 ;;   (projectile-mode +1))
 
 
-(calendar)
-(define-key calendar-mode-map "\M-[" 'calendar-backward-month)
-(define-key calendar-mode-map "\M-]" 'calendar-forward-month)
-(appt-activate 1)
-(define-key calendar-mode-map "j" 'calendar-backward-day)
-(define-key calendar-mode-map "k" 'calendar-forward-week)
-(define-key calendar-mode-map "l" 'calendar-backward-week)
-(define-key calendar-mode-map ";" 'calendar-forward-day)
+;; (calendar)
+;; (define-key calendar-mode-map "\M-[" 'calendar-backward-month)
+;; (define-key calendar-mode-map "\M-]" 'calendar-forward-month)
+;; (appt-activate 1)
+;; (define-key calendar-mode-map "j" 'calendar-backward-day)
+;; (define-key calendar-mode-map "k" 'calendar-forward-week)
+;; (define-key calendar-mode-map "l" 'calendar-backward-week)
+;; (define-key calendar-mode-map ";" 'calendar-forward-day)
 
 (maybe-require-package 'pyim)
 (maybe-require-package 'pyim-basedict)
@@ -294,16 +289,16 @@
 (add-hook 'python-mode-hook 'blacken-mode)
 (define-key python-mode-map (kbd "-") (lambda () (interactive) (insert-char #x5f)))
 (define-key python-mode-map (kbd "_") (lambda () (interactive) (insert-char #x2d)))
-
-(maybe-require-package 'ob-clojure)
-(setq org-babel-clojure-backend 'cider)
-(maybe-require-package 'cider)
 (maybe-require-package 'paredit)
-(add-hook 'clojure-mode-hook 'enable-paredit-mode)
-(define-key paredit-mode-map (kbd "C-j") nil)
-(define-key cider-mode-map (kbd "C-c C-e") nil)
 
-(maybe-require-package hl-todo)
+;; (maybe-require-package 'ob-clojure)
+;; (setq org-babel-clojure-backend 'cider)
+;; (maybe-require-package 'cider)
+;; (add-hook 'clojure-mode-hook 'enable-paredit-mode)
+;; (define-key paredit-mode-map (kbd "C-j") nil)
+;; (define-key cider-mode-map (kbd "C-c C-e") nil)
+
+(maybe-require-package 'hl-todo)
 (global-hl-todo-mode 1)
 (define-key hl-todo-mode-map (kbd "C-c C-h n") 'hl-todo-next)
 (define-key hl-todo-mode-map (kbd "C-c C-h p") 'hl-todo-previous)
@@ -322,6 +317,11 @@
 ;; (require 'ibus)
 
 (maybe-require-package 'elfeed)
+(require 'elfeed)
+(define-key elfeed-search-mode-map (kbd "C-l") 'elfeed-update)
+(define-key elfeed-search-mode-map (kbd "k") 'next-line)
+(define-key elfeed-search-mode-map (kbd "l") 'previous-line)
+(define-key elfeed-show-mode-map (kbd "<return>") 'shr-copy-url)
 
 (maybe-require-package 'tabbar)
 (add-hook 'tabbar-mode-hook (lambda () (interactive) (remove-hook 'kill-buffer-hook 'tabbar-buffer-track-killed)))
@@ -359,6 +359,16 @@
 (put 'set-goal-column 'disabled nil)
 
 
+(use-package avy
+  :bind(( "C-;" . avy-goto-char)
+	( "C-j" . avy-goto-word-or-subword-1)
+	( "M-j" . avy-goto-line)))
+
+(use-package latex
+  :bind (:map LaTeX-mode-map ("C-j" . avy-goto-word-or-subword-1))
+  :after (avy)
+  :defer 3)
+
 (use-package nov-mode
   :bind (:map nov-mode-map
               ("C-d" . youdao-dictionary-search-at-point)
@@ -374,16 +384,10 @@
 	      ("q" . nil )
 	      ("C-q" . quit-window)))
 
-(use-package elfeed-mode
-  :bind (:map elfeed-show-mode-map
-              ("<return>" . shr-copy-url)
-	      ("C-l" . elfeed-update)
-	      ("k" . next-line)
-	      ("l" . previous-line)))
-
 (use-package flyspell-mode
   :bind (:map flyspell-mode-map
-              ("C-c C-d" . ispell-word)))
+              ("C-c C-d" . ispell-word))
+  :after (avy))
 
 (use-package pdf-tools
   :bind (:map pdf-view-mode-map
@@ -392,10 +396,18 @@
 	      ("d" . pdf-annot-delete)
 	      ("M-SPC" . pdf-view-scroll-down-or-previous-page)))
 
-(use-package circe-mode
+(use-package circe
   :bind (:map circe-mode-map
               ("M-n" . "\C-u4\C-v")
 	      ( "M-p" . "\C-u4\M-v")))
+
+(use-package q4
+  :bind(:map q4-mode-map
+	     ("f" . q4/point-to-next-post)
+	     ("j" . q4/point-to-next-post))
+  :config (q4/toggle-thumbnailing-method)
+  :defer 5)
+
 ;;--------------------------------------------------------------------------------
 ;; global binds
 ;;--------------------------------------------------------------------------------
@@ -424,10 +436,7 @@
 (global-set-key (kbd "C-M-n") 'forward-list)
 (global-set-key (kbd "M-s") 'paredit-splice-sexp)
 
-(global-set-key (kbd "C-;") 'avy-goto-char)
-(global-set-key (kbd "C-j") 'avy-goto-word-or-subword-1)
-(global-set-key (kbd "M-j") 'avy-goto-line)
-
+(maybe-require-package 'bm)
 (autoload 'bm-toggle   "bm" "Toggle bookmark in current buffer." t)
 (autoload 'bm-next     "bm" "Goto bookmark."                     t)
 (autoload 'bm-previous "bm" "Goto previous bookmark."            t)
@@ -452,13 +461,19 @@
 
 (global-set-key (kbd "C-<f2>") 'multi-occur-in-this-mode)
 (global-set-key [f6] 'revert-this-buffer)
-(define-key elfeed-show-mode-map (kbd "o") 'ravar/elfeed-play-enclosure-mpd)
-(define-key q4-mode-map (kbd "s") 'q4-override/save-post-image)
 (global-set-key (kbd "M-J") 'move-temp-del)
+(require 'youdao-dictionary)
 (define-key youdao-dictionary-mode-map (kbd "i") 'youdao-extract)
 (global-set-key (kbd "H-c") 'collapse-head-whitespace)
 (define-key org-mode-map (kbd "H-k") 'avy-jump-open)
 (global-set-key (kbd "H-y" ) 'avy-yank-line)
+
+(add-hook 'q4-mode-hook
+	  (lambda ()
+	    (define-key q4-mode-map (kbd "s") 'q4-override/save-post-image)))
+(add-hook 'elfeed-show-mode-hook
+	  (lambda ()
+	    (define-key elfeed-show-mode-map (kbd "o") 'ravar/elfeed-play-enclosure-mpd)))
 
 ;;--------------------------------------------------------------------------------
 ;; Many default configurations are frustrating, loads some modified functions
