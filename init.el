@@ -83,6 +83,7 @@
 ;;super bright, but does handle org
 ;; (load-theme 'leuven t)
 
+(maybe-require-package 'j-mode)
 (maybe-require-package 'which-key)
 (which-key-mode 1)
 
@@ -358,7 +359,12 @@
 (use-package avy
   :bind(( "C-;" . avy-goto-char)
 	( "C-j" . avy-goto-word-or-subword-1)
-	( "M-j" . avy-goto-line)))
+	( "M-j" . avy-goto-line)
+	( "M-i" . avy-isearch)))
+(global-set-key (kbd "H-m") 'avy-move-region)
+(global-set-key (kbd "H-k") 'avy-kill-region)
+(global-set-key (kbd "H-y") 'avy-kill-ring-save-region)
+
 
 (use-package latex
   :bind (:map LaTeX-mode-map ("C-j" . avy-goto-word-or-subword-1))
