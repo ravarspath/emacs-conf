@@ -374,15 +374,15 @@
 (use-package nov-mode
   :bind (:map nov-mode-map
               ("C-d" . youdao-dictionary-search-at-point)
-	      ("d" . dictionary-search-at-point)
+	      ("d" . youdao-dictionary-search-at-point)
 	      ("j" . backward-char)
 	      (";" . forward-char)
-	      ("k" . line)
+	      ("k" . next-line)
 	      ("l" . previous-line)
 	      ("g" . keyboard-quit)
 	      ("n" . scroll-up)
 	      ("p" . scroll-down)
-	      ("SPC" . mark-command)
+	      ("SPC" . set-mark-command)
 	      ("q" . nil )
 	      ("C-q" . quit-window)))
 
@@ -468,7 +468,7 @@
 (define-key youdao-dictionary-mode-map (kbd "i") 'youdao-extract)
 (global-set-key (kbd "H-c") 'collapse-head-whitespace)
 (define-key org-mode-map (kbd "H-k") 'avy-jump-open)
-(global-set-key (kbd "H-y" ) 'avy-yank-line)
+;; (global-set-key (kbd "H-y" ) 'avy-yank-line)
 
 (add-hook 'q4-mode-hook
 	  (lambda ()
