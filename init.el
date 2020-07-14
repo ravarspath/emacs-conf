@@ -368,8 +368,8 @@
 
 (use-package latex
   :bind (:map LaTeX-mode-map ("C-j" . avy-goto-word-or-subword-1))
-  :after (avy)
-  :defer 3)
+  :bind (:map latex-mode-map ("C-j" . avy-goto-word-or-subword-1))
+  :after (avy))
 
 (use-package nov-mode
   :bind (:map nov-mode-map
@@ -406,7 +406,8 @@
 (use-package q4
   :bind(:map q4-mode-map
 	     ("f" . q4/point-to-next-post)
-	     ("j" . q4/point-to-next-post))
+	     ("j" . q4/point-to-next-post)
+	     ("e" . q4/open-post-image))
   :config (q4/toggle-thumbnailing-method)
   :defer 5)
 
