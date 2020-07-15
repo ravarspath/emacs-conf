@@ -21,7 +21,6 @@ a HTML file."
 	  (cdr (assq processing-type org-preview-latex-process-alist)))
 	 (programs (plist-get processing-info :programs))
 	 (error-message (or (plist-get processing-info :message) ""))
-	 (use-xcolor (plist-get processing-info :use-xcolor))
 	 (image-input-type (plist-get processing-info :image-input-type))
 	 (image-output-type (plist-get processing-info :image-output-type))
 	 (post-clean (or (plist-get processing-info :post-clean)
@@ -52,36 +51,27 @@ a HTML file."
 	 (resize-mini-windows nil)) ;Fix Emacs flicker when creating image.
     (dolist (program programs)
       (org-check-external-command program error-message))
-    (if use-xcolor
-	(progn (if (eq fg 'default)
-		   (setq fg (org-latex-color :foreground))
-		 (setq fg (org-latex-color-format fg)))
-	       (if (eq bg 'default)
-		   (setq bg (org-latex-color :background))
-		 (setq bg (org-latex-color-format
-			   (if (string= bg "Transparent") "white" bg))))
-	       (with-temp-file texfile
-		 (insert latex-header)
-		 (insert "\n\\begin{document}\n"
-			 "\\definecolor{fg}{rgb}{" fg "}\n"
-			 "\\definecolor{bg}{rgb}{" bg "}\n"
-			 "\n\\pagecolor{bg}\n"
-			 "\n{\\color{fg}\n"
-			 string
-			 "\n}\n"
-			 "\n\\end{document}\n")))
-      (if (eq fg 'default)
-	  (setq fg (org-dvipng-color :foreground))
-	(unless (string= fg "Transparent")
-	  (setq fg (org-dvipng-color-format fg))))
-      (if (eq bg 'default)
-	  (setq bg (org-dvipng-color :background))
-	(unless (string= bg "Transparent")
-	  (setq bg (org-dvipng-color-format bg))))
-      (with-temp-file texfile
-	(insert latex-header)
-	(insert "\n\\begin{document}\n" string "\n\\end{document}\n")))
-
+    (if (eq fg 'default)
+	(setq fg (org-latex-color :foreground))
+      (setq fg (org-latex-color-format fg)))
+    (if (eq bg 'default)
+	(setq bg (org-latex-color :background))
+      (setq bg (org-latex-color-format
+		(if (string= bg "Transparent") "white" bg))))
+    ;; Remove TeX \par at end of snippet to avoid trailing space.
+    (if (string-suffix-p string "\n")
+        (aset string (1- (length string)) ?%)
+      (setq string (concat string "%")))
+    (with-temp-file texfile
+      (insert latex-header)
+      (insert "\n\\begin{document}\n"
+	      "\\definecolor{fg}{rgb}{" fg "}%\n"
+	      "\\definecolor{bg}{rgb}{" bg "}%\n"
+	      "\n\\pagecolor{bg}%\n"
+	      "\n{\\color{fg}\n"
+	      string
+	      "\n}\n"
+	      "\n\\end{document}\n"))
     (let* ((err-msg (format "Please adjust `%s' part of \
 `org-preview-latex-process-alist'."
 			    processing-type))
@@ -91,9 +81,7 @@ a HTML file."
 	   (image-output-file
 	    (org-compile-file
 	     image-input-file image-converter image-output-type err-msg log-buf
-	     `((?F . ,(shell-quote-argument fg))
-	       (?B . ,(shell-quote-argument bg))
-	       (?D . ,(shell-quote-argument (format "%s" dpi)))
+	     `((?D . ,(shell-quote-argument (format "%s" dpi)))
 	       (?S . ,(shell-quote-argument (format "%s" (/ dpi 140.0))))))))
       (kill-buffer log-buf)
       (copy-file image-output-file tofile 'replace)
@@ -102,6 +90,8 @@ a HTML file."
 	  (delete-file (concat texfilebase e))))
       image-output-file)))
 ;;now actually shuts up
+
+
 
 (defun q4/show-replies (&optional post nomark)
   "Pop a new window to navigate through replies with. The original thread
