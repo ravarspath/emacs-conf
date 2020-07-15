@@ -40,7 +40,7 @@ This function is called by `org-babel-execute-src-block'"
   (let ((session (wolfram-console-ensure-session)))
     (with-current-buffer (process-buffer session)
       (goto-char (point-max))
-      (insert (format "\n%s\n" str))
+      (insert (format "%s\n" str))
       (let ((beg (point)))
 	(comint-send-input)
 	(sit-for .1)

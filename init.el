@@ -134,6 +134,7 @@
 (define-key org-mode-map (kbd "H-[") 'org-agenda)
 ;;latex drives me up a wall
 (key-chord-define org-mode-map "qi" '(lambda () (interactive) (insert "\\")))
+(key-chord-mode 1)
 
 (maybe-require-package 'jedi)
 (add-hook 'python-mode-hook 'jedi:setup)
@@ -206,7 +207,9 @@
 (add-hook 'dired-load-hook
 	  (function (lambda () (load "dired-x"))))
 
-(add-hook 'dired-mode-hook (lambda () (dired-omit-mode)))
+
+(add-hook 'dired-load-hook (lambda () (require 'dired-x)))
+(setq dired-omit-mode t)
 
 (maybe-require-package 'flyspell)
 (add-hook 'markdown-mode-hook 'flyspell-mode)
@@ -354,6 +357,9 @@
 
 (add-hook 'diary-list-entries-hook 'diary-sort-entries)
 (put 'set-goal-column 'disabled nil)
+
+(add-to-list 'load-path (expand-file-name "custom-packages" user-emacs-directory))
+(require 'ob-wolfram)
 
 
 (use-package avy

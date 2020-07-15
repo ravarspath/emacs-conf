@@ -9,20 +9,20 @@
 
 
 (defcustom wolfram-console-cmd-args '()
-  "Arguments to be passed to the j-console-cmd on start"
+  "Arguments to be passed to the wolfram-console-cmd on start"
   :type 'string
   :group 'wolfram-console)
 
 (defcustom wolfram-console-cmd-init-file nil
   "Full path to the file who's contents are sent to the
-  j-console-cmd on start
+  wolfram-console-cmd on start
 
 Should be NIL if there is no file not the empty string"
   :type 'string
   :group 'wolfram-console)
 
 (defcustom wolfram-console-cmd "wolfram"
-  "Name of the executable used for the J REPL session"
+  "Name of the executable used for the wolfram REPL session"
   :type 'string
   :group 'wolfram-console)
 
