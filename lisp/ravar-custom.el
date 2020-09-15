@@ -45,6 +45,7 @@
 		(looking-at "[A-Z]+")))))
 
 (put 'org-mode 'flyspell-mode-predicate 'flyspell-ignore-abbrev)
+(put 'text-mode 'flyspell-mode-predicate 'flyspell-ignore-abbrev)
 
 ;;--------------------------------------------------------------------------------
 ;; not really used, this is an attempt to make navigating latex nicer

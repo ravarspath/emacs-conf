@@ -29,18 +29,19 @@
   :bind (:map rust-mode-map
 	      ("-" . (lambda () (interactive) (insert-char #x5f)))
 	      ("_" . (lambda () (interactive) (insert-char #x2d)))
-	      ("C-c C-a" . company-mode))
+	      ("C-c C-a" . company-mode)
+	      ("C-." . lsp-find-definition)))
   ;;doesn't play nice hyper key
-  :config (progn
-	    (define-key rust-mode-map (kbd "H-r") lsp-rename)
-	    (define-key rust-mode-map (kbd "H-l") lsp-avy-lens)
-	    (define-key rust-mode-map (kbd "H-m H-l") lsp-lens-mode)))
+  ;; :config (progn
+  ;; 	    ;; (define-key rust-mode-map (kbd "H-r") lsp-rename)
+  ;; 	    (define-key rust-mode-map (kbd "H-l") lsp-avy-lens)
+  ;; 	    (define-key rust-mode-map (kbd "H-m H-l") lsp-lens-mode)))
 
 (setq rust-format-one-save t)
 ;; is lens mode any good for rust??
 (setq rust-match-angle-brackets nil)
 (setq exec-path(append exec-path '("~/.cargo/bin")))
 (setq racer-cmd "~/.cargo/bin/racer")
-(setq racer-rust-src-path "~/code/rust/src/")
+(setq racer-rust-src-path "~/Desktop/source/rust/src/")
 
 (provide 'init-rust)

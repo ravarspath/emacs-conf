@@ -34,6 +34,8 @@
 ;; package "agnostic" configs
 ;;--------------------------------------------------------------------------------
 
+(global-set-key (kbd "H-b") 'switch-to-prev-buffer)
+(global-set-key (kbd "H-f") 'switch-to-next-buffer)
 (electric-pair-mode 1)
 
 (global-linum-mode)
@@ -132,7 +134,7 @@
 (add-hook 'org-babel-after-execute-hook 'org-display-inline-images 'append)
 (setq org-confirm-babel-evaluate nil)
 (define-key org-mode-map (kbd "H-[") 'org-agenda)
-;;latex drives me up a wall
+;;typing latex drives me up a wall
 (key-chord-define org-mode-map "qi" '(lambda () (interactive) (insert "\\")))
 (key-chord-mode 1)
 
@@ -167,6 +169,23 @@
   '(setq zotxt-default-bibliography-style "mkbehr-short"))
 (add-hook 'org-mode-hook 'org-zotxt-mode)
 
+(maybe-require-package 'bash-completion)
+(setq bash-completion-nospace t)
+(defun bash-completion-eshell-capf ()
+  (bash-completion-dynamic-complete-nocomint
+   (save-excursion (eshell-bol) (point))
+   (point) t))
+
+(defun bash-completion-from-eshell ()
+  (interactive)
+  (let ((completion-at-point-functions
+         '(bash-completion-eshell-capf)))
+    (completion-at-point)))
+;;WTF
+(add-hook 'eshell-mode-hook (lambda () (define-key eshell-mode-map (kbd "C-i") 'bash-completion-from-eshell )))
+
+
+
 ;; (add-to-list 'load-path "~/.emacs.d/customModes/")
 
 (maybe-require-package 'auctex)
@@ -186,7 +205,7 @@
 (use-package flymake
   :bind (:map flymake-mode-map
 	      ("C-c C-," . 'flymake-goto-next-error)
-	      ("C-c C-." . 'flymake-goto-prev-error)))
+	      ("C-c C-." . 'flymake-goto-prev-error))) 
 
 ;; (add-hook 'LaTeX-mode-hook 'turn-on-reftex)
 ;; (setq reftex-plug-into-AUCTeX t)
@@ -201,7 +220,11 @@
 (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
 (setq web-mode-engines-alist
       '(("django"    . "\\.html\\'"))
-)
+      )
+(use-package web-mode
+  :bind (:map web-mode-map
+	      ("C-c i" . 'web-mode-element-insert)))
+
 
 (maybe-require-package 'dired-x)
 (add-hook 'dired-load-hook
@@ -240,6 +263,7 @@
 (define-key helm-command-map (kbd "d") 'helm-dictionary)
 (define-key helm-command-map (kbd "C-s") 'helm-occur)
 (define-key helm-command-map (kbd "C-g") 'helm-grep-do-git-grep)
+(add-to-list 'desktop-globals-to-save 'helm-ff-history)
 ;;TODO integrate helm with helpful??
 
 (maybe-require-package 'markdown-mode)
@@ -264,6 +288,7 @@
 
 (define-key org-mode-map (kbd "H-o") 'helm-occur)
 (define-key org-mode-map (kbd "H-l") 'rorg-double-link)
+
 ;; (pyvenv-activate "~/envs/benv")
 
 ;; (use-package projectile
@@ -273,23 +298,27 @@
 ;;   (projectile-mode +1))
 
 
-;; (calendar)
-;; (define-key calendar-mode-map "\M-[" 'calendar-backward-month)
-;; (define-key calendar-mode-map "\M-]" 'calendar-forward-month)
-;; (appt-activate 1)
-;; (define-key calendar-mode-map "j" 'calendar-backward-day)
-;; (define-key calendar-mode-map "k" 'calendar-forward-week)
-;; (define-key calendar-mode-map "l" 'calendar-backward-week)
-;; (define-key calendar-mode-map ";" 'calendar-forward-day)
+(calendar)
+(define-key calendar-mode-map "\M-[" 'calendar-backward-month)
+(define-key calendar-mode-map "\M-]" 'calendar-forward-month)
+(appt-activate 1)
+(define-key calendar-mode-map "j" 'calendar-backward-day)
+(define-key calendar-mode-map "k" 'calendar-forward-week)
+(define-key calendar-mode-map "l" 'calendar-backward-week)
+(define-key calendar-mode-map ";" 'calendar-forward-day)
 
 (maybe-require-package 'pyim)
 (maybe-require-package 'pyim-basedict)
 (pyim-basedict-enable)
 
+(maybe-require-package 'pyvenv)
+(maybe-require-package 'blacken)
+
 (add-hook 'python-mode-hook 'blacken-mode)
 (define-key python-mode-map (kbd "-") (lambda () (interactive) (insert-char #x5f)))
 (define-key python-mode-map (kbd "_") (lambda () (interactive) (insert-char #x2d)))
 (maybe-require-package 'paredit)
+(autoload 'paredit-splice-sexp "paredit")
 
 ;; (maybe-require-package 'ob-clojure)
 ;; (setq org-babel-clojure-backend 'cider)
@@ -361,6 +390,8 @@
 (add-to-list 'load-path (expand-file-name "custom-packages" user-emacs-directory))
 (require 'ob-wolfram)
 
+;; (maybe-require-package 'edbi)
+
 
 (use-package avy
   :bind(( "C-;" . avy-goto-char)
@@ -375,6 +406,7 @@
 (use-package latex
   :bind (:map LaTeX-mode-map ("C-j" . avy-goto-word-or-subword-1))
   :bind (:map latex-mode-map ("C-j" . avy-goto-word-or-subword-1))
+  :config (key-chord-define LaTeX-mode-map "qi" '(lambda () (interactive) (insert "\\")))
   :after (avy))
 
 (use-package nov-mode

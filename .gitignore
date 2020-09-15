@@ -32,3 +32,5 @@ ac-comphist.dat
 /git
 /elpa-bak/
 .edbi-ds-history
+/elpa*
+%backup*
