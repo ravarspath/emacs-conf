@@ -1,4 +1,25 @@
 ;;--------------------------------------------------------------------------------
+;; this allow for adjusting the size of latex fragments
+;; in tandem with the font size. 
+;;--------------------------------------------------------------------------------
+(defun my-buffer-scale ()
+  "returns the text scale float of the current buffer"
+  (interactive)
+  (expt text-scale-mode-step text-scale-mode-amount))
+
+(defun org-format-latex--advice (fun &rest r)
+  (let (
+	(oscale (plist-get org-format-latex-options :scale))
+	(mult (my-buffer-scale)))
+    (progn
+      (plist-put org-format-latex-options :scale
+		 (* mult oscale))
+      (apply fun r)
+      (plist-put org-format-latex-options :scale oscale))))
+
+(add-function :around (symbol-function 'org-format-latex) #'org-format-latex--advice)
+
+;;--------------------------------------------------------------------------------
 ;; This allows for easy cross linking of .org files used to keep research notes
 ;;--------------------------------------------------------------------------------
 (defun rorg-double-link ()

@@ -327,6 +327,13 @@
 ;; (define-key paredit-mode-map (kbd "C-j") nil)
 ;; (define-key cider-mode-map (kbd "C-c C-e") nil)
 
+(maybe-require-package 'lammps-mode)
+(autoload 'lammps-mode "lammps-mode.el" "LAMMPS mode." t)
+(setq auto-mode-alist (append auto-mode-alist
+                              '(("in\\." . lammps-mode))
+                              '(("\\.lmp\\'" . lammps-mode))
+                              ))
+
 (maybe-require-package 'hl-todo)
 (global-hl-todo-mode 1)
 (define-key hl-todo-mode-map (kbd "C-c C-h n") 'hl-todo-next)
