@@ -102,6 +102,11 @@
 (maybe-require-package 'flycheck)
 (require 'eldoc)
 
+;;https://github.com/emacsmirror/emacswiki.org/blob/master/isearch-prop.el
+;;https://github.com/emacsmirror/emacswiki.org/blob/master/isearch%2b.el
+;; (eval-after-load "isearch" '(require 'isearch+))
+;; (add-to-list 'load-path (expand-file-name "addedPackages" user-emacs-directory))
+
 (require 'init-rust)
 
 ;; (use-package lsp-mode
