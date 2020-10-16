@@ -399,8 +399,7 @@
 (add-hook 'diary-list-entries-hook 'diary-sort-entries)
 (put 'set-goal-column 'disabled nil)
 
-(add-to-list 'load-path (expand-file-name "custom-packages" user-emacs-directory))
-(require 'ob-wolfram)
+(git-ensure-package "https://github.com/ryanswilson59/ob-wolfram" "ob-wolfram")
 
 ;; (maybe-require-package 'edbi)
 
