@@ -423,7 +423,7 @@
 (use-package nov-mode
   :bind (:map nov-mode-map
               ("C-d" . youdao-dictionary-search-at-point)
-	      ("d" . youdao-dictionary-search-at-point)
+	      ("d" . danish-dictionary-at-point)
 	      ("j" . backward-char)
 	      (";" . forward-char)
 	      ("k" . next-line)
