@@ -1,4 +1,31 @@
 ;;--------------------------------------------------------------------------------
+;; setting this so I can keep nonstandard configs for myself
+;;--------------------------------------------------------------------------------
+
+(defvar is-ravar)
+(setq is-ravar nil)
+
+;;--------------------------------------------------------------------------------
+;; handy function for quick dictionary lookup. However since I doubt you will be learning
+;; danish anytime soon this function is here mostly to give you an idea how you use it
+;; I have custom logic because I am using a local dictionary instead of the dict.org
+;; dictionary
+;;--------------------------------------------------------------------------------
+
+;;example usage
+;;(setq dictionary-server "dict.org")
+;;(dictionary-search "sten" "fd-dan-eng")
+
+(if is-ravar (setq dictionary-server "localhost"))
+
+(defun danish-dictionary-at-point ()
+	"uses the dictionary package from melpa to search word at point in the fd-dan-eng dictionary"
+	(interactive)
+	(if is-ravar
+	    (dictionary-search (word-at-point) "dan-eng" )
+	  (dictionary-searc (word-at-point "fd-dan-eng"))))
+
+;;--------------------------------------------------------------------------------
 ;; this allow for adjusting the size of latex fragments
 ;; in tandem with the font size. 
 ;;--------------------------------------------------------------------------------
@@ -222,3 +249,5 @@ and will be used to save the associated image"
    (car (occur-read-primary-args))))
 
 (provide 'ravar-custom)
+
+

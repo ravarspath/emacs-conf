@@ -1,4 +1,5 @@
 (custom-set-variables
+ '(avy-all-windows-alt 'all-frames)
  '(browse-url-browser-function (quote add-to-kill))
  '(browse-url-firefox-new-window-is-tab t)
  '(calendar-setup (quote calendar-only))
