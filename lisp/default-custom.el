@@ -13,7 +13,7 @@
  '(lsp-prefer-flymake :none)
  '(lsp-rust-build-on-save nil)
  '(max-mini-window-height 0.75)
- '(org-agenda-window-setup (quote other-window))
+ ;; '(org-agenda-window-setup (quote other-window))
  '(org-file-apps
    (quote
     ((auto-mode . emacs)

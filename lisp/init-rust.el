@@ -1,16 +1,22 @@
 
-(maybe-require-package 'rust-mode)
+;; (maybe-require-package 'rust-mode)
+(maybe-require-package 'rust)
 
 (maybe-require-package 'racer)
 (maybe-require-package 'flycheck-rust)
 (maybe-require-package 'cargo)
 
-(maybe-require-package 'lsp)
-(maybe-require-package 'company-lsp)
+(maybe-require-package 'lsp-mode)
+;; (setq lsp-auto-configure nil)
+
+ ;; yas-snippet config
+(setq-local yas-inhibit-overlay-modification-protection t)
+
+;; (maybe-require-package 'company-lsp)
 (maybe-require-package 'toml-mode)
 
-(require 'company-lsp)
-(push 'company-lsp company-backends)
+;; (require 'company-lsp)
+;; (push 'company-lsp company-backends)
 
 (add-hook 'rust-mode-hook 'lsp-mode)
 (add-hook 'rust-mode-hook 'company-mode)
@@ -43,5 +49,9 @@
 (setq exec-path(append exec-path '("~/.cargo/bin")))
 (setq racer-cmd "~/.cargo/bin/racer")
 (setq racer-rust-src-path "~/Desktop/source/rust/src/")
+
+(setq lsp-headerline-breadcrumb-enable nil)
+(setq lsp-modeline-diagnostics-enable nil)
+
 
 (provide 'init-rust)

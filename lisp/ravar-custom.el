@@ -248,6 +248,15 @@ and will be used to save the associated image"
    (get-buffers-matching-mode major-mode)
    (car (occur-read-primary-args))))
 
+(defun clopen-buffer ()
+  "derp"
+  (interactive)
+  (let ((val buffer-file-name))
+    (progn (kill-buffer nil)
+	   (switch-to-buffer (find-file-noselect val)))))
+
+
+
 (provide 'ravar-custom)
 
 

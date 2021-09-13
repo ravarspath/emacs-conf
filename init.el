@@ -36,6 +36,9 @@
 
 (global-set-key (kbd "H-b") 'switch-to-prev-buffer)
 (global-set-key (kbd "H-f") 'switch-to-next-buffer)
+(global-set-key (kbd "H-n") 'switch-to-next-buffer)
+(global-set-key (kbd "H-p") 'switch-to-prev-buffer)
+
 (electric-pair-mode 1)
 
 (global-linum-mode)
@@ -102,11 +105,15 @@
 (maybe-require-package 'flycheck)
 (require 'eldoc)
 
+(git-ensure-package "https://depp.brause.cc/chuck-mode.git" "chuck-mode")
+(require 'chuck-mode)
+
 ;;https://github.com/emacsmirror/emacswiki.org/blob/master/isearch-prop.el
 ;;https://github.com/emacsmirror/emacswiki.org/blob/master/isearch%2b.el
 ;; (eval-after-load "isearch" '(require 'isearch+))
 ;; (add-to-list 'load-path (expand-file-name "addedPackages" user-emacs-directory))
 
+;;TODO URGENT fix
 (require 'init-rust)
 
 ;; (use-package lsp-mode
@@ -138,12 +145,16 @@
 
 (add-hook 'org-babel-after-execute-hook 'org-display-inline-images 'append)
 (setq org-confirm-babel-evaluate nil)
-(define-key org-mode-map (kbd "H-[") 'org-agenda)
+;; (define-key org-mode-map (kbd "H-[") 'org-agenda)
 ;;typing latex drives me up a wall
 (key-chord-define org-mode-map "qi" '(lambda () (interactive) (insert "\\")))
 (key-chord-mode 1)
 
 (maybe-require-package 'jedi)
+(maybe-require-package 'company-anaconda)
+(eval-after-load "company"
+  '(add-to-list 'company-backends 'company-anaconda))
+(add-hook 'python-mode-hook 'anaconda-mode)
 (add-hook 'python-mode-hook 'jedi:setup)
 (setq jedi:complete-on-dot t)
 (setq jedi:setup-keys t)
@@ -216,7 +227,19 @@
 ;; (setq reftex-plug-into-AUCTeX t)
 ;; setup for reftex to handle refrences
 ;; (require 'tex)
-(setq TeX-PDF-mode nil)
+(setq TeX-PDF-mode t)
+(setq TeX-view-program-selection '((output-pdf "PDF Tools"))
+      TeX-source-correlate-start-server t)
+
+(add-hook 'TeX-after-compilation-finished-functions
+          #'TeX-revert-document-buffer)
+
+;;TODO use this to use make with auctex
+;; (eval-after-load "tex" '(add-to-list 'TeX-command-list
+;; 				     '("Make" "make" TeX-run-compile nil t)))
+;;(setq latex-run-command "pdflatex")
+;; I think uses stock tex instead of auctex
+
 ;;not sure what this does when true, except breaks preview, unless fix from reddit
 ;;also may want to use synctex? not sure what it does
 ;;also what the hell is latex-magic buffer
@@ -240,7 +263,6 @@
 (setq dired-omit-mode t)
 
 (maybe-require-package 'flyspell)
-(add-hook 'markdown-mode-hook 'flyspell-mode)
 (maybe-require-package 'pdf-tools)
 (pdf-loader-install)
 (add-hook 'pdf-view-mode-hook (lambda () (linum-mode 0)))
@@ -256,7 +278,7 @@
 (maybe-require-package 'helm-config)
 (maybe-require-package 'helm-descbinds)
 (maybe-require-package 'helm-dictionary)
-(require 'helm)
+(maybe-require-package 'helm)
 (require 'helm-config)
 (helm-mode 1)
 (define-key helm-map (kbd "C-z")  'helm-select-action)
@@ -271,10 +293,12 @@
 (add-to-list 'desktop-globals-to-save 'helm-ff-history)
 ;;TODO integrate helm with helpful??
 
-(maybe-require-package 'markdown-mode)
-(add-hook 'markdown-mode-hook 'visual-line-mode)
-(define-key markdown-mode-map "\M-n" "\C-u4\C-v")
-(define-key markdown-mode-map "\M-p" "\C-u4\M-v")
+;;TODO URGENT re-enable
+;; (maybe-require-package 'markdown-mode)
+;; (add-hook 'markdown-mode-hook 'flyspell-mode)
+;; (add-hook 'markdown-mode-hook 'visual-line-mode)
+;; (define-key markdown-mode-map "\M-n" "\C-u4\C-v")
+;; (define-key markdown-mode-map "\M-p" "\C-u4\M-v")
 
 ;; honestly not that useful
 ;; (require 'god-mode)
@@ -311,6 +335,15 @@
 (define-key calendar-mode-map "k" 'calendar-forward-week)
 (define-key calendar-mode-map "l" 'calendar-backward-week)
 (define-key calendar-mode-map ";" 'calendar-forward-day)
+(define-key calendar-mode-map (kbd "H-i")  'diary-insert-entry)
+
+;; (define-key calendar-mode-map "id"  'diary-insert-entry)
+;; (define-key calendar-mode-map "iw"  'diary-insert-weekly-entry)
+;; (define-key calendar-mode-map "im"  'diary-insert-monthly-entry)
+;; (define-key calendar-mode-map "iy"  'diary-insert-yearly-entry)
+;; (define-key calendar-mode-map "ia"  'diary-insert-anniversary-entry)
+;; (define-key calendar-mode-map "ib"  'diary-insert-block-entry)
+;; (define-key calendar-mode-map "ic"  'diary-insert-cyclic-entry)
 
 (maybe-require-package 'pyim)
 (maybe-require-package 'pyim-basedict)
@@ -384,6 +417,7 @@
 ;; (require 'general)
 
 (yas-global-mode)
+;; (define-key yas-minor-mode-map (kbd "C-c C-i ") 'yas-insert-snippet)
 
 (maybe-require-package 'diminish)
 (diminish 'eldoc-mode)
@@ -413,13 +447,14 @@
 (global-set-key (kbd "H-k") 'avy-kill-region)
 (global-set-key (kbd "H-y") 'avy-kill-ring-save-region)
 
-
+;; TODO uncomment figure out what is going on with emacs 28
 (use-package latex
   :bind (:map LaTeX-mode-map ("C-j" . avy-goto-word-or-subword-1))
   :bind (:map latex-mode-map ("C-j" . avy-goto-word-or-subword-1))
   :config (key-chord-define LaTeX-mode-map "qi" '(lambda () (interactive) (insert "\\")))
   :after (avy))
 
+;; TODO why is this not running first time
 (use-package nov-mode
   :bind (:map nov-mode-map
               ("C-d" . youdao-dictionary-search-at-point)
@@ -434,6 +469,7 @@
 	      ("SPC" . set-mark-command)
 	      ("q" . nil )
 	      ("C-q" . quit-window)))
+(setq nov-variable-pitch nil)
 
 (use-package flyspell-mode
   :bind (:map flyspell-mode-map
