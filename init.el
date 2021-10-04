@@ -479,7 +479,8 @@
 	      ("p" . scroll-down)
 	      ("SPC" . set-mark-command)
 	      ("q" . nil )
-	      ("C-q" . quit-window)))
+	      ("C-q" . quit-window))
+  :config (nov-after-load-patch))
 (setq nov-variable-pitch nil)
 
 (use-package flyspell-mode
