@@ -215,6 +215,18 @@ and will be used to save the associated image"
   (revert-buffer nil t t)
   (message (concat "Reverted buffer " (buffer-name))))
 
+
+;;--------------------------------------------------------------------------------
+;; aesthetic centering for full screen reading
+;;--------------------------------------------------------------------------------
+(defun nov-center-text-after-render ()
+            (interactive)
+            "add to nov-post-html-render-hook to make the text centered in the frame"
+            (let* ((width (window-width))
+          	 (offset (truncate (* (- width nov-text-width) .5)))
+          	 (prepend (make-string offset ? )))
+              (string-insert-rectangle (point-min) (point-max) prepend)))
+
 ;;--------------------------------------------------------------------------------
 ;; titles usually self explanatory, not sure what i used them for
 ;;--------------------------------------------------------------------------------

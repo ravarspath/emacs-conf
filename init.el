@@ -480,8 +480,11 @@
 	      ("SPC" . set-mark-command)
 	      ("q" . nil )
 	      ("C-q" . quit-window))
-  :config (nov-after-load-patch))
+  :config (nov-after-load-patch)
+  :init
+  (add-hook 'nov-post-html-render-hook 'nov-center-text-after-render))
 (setq nov-variable-pitch nil)
+
 
 (use-package flyspell-mode
   :bind (:map flyspell-mode-map
