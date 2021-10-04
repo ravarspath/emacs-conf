@@ -34,6 +34,9 @@
 ;; package "agnostic" configs
 ;;--------------------------------------------------------------------------------
 
+;;who thought this was a good idea
+(setq ring-bell-function 'ignore)
+
 (global-set-key (kbd "H-b") 'switch-to-prev-buffer)
 (global-set-key (kbd "H-f") 'switch-to-next-buffer)
 (global-set-key (kbd "H-n") 'switch-to-next-buffer)
@@ -377,16 +380,23 @@
 (define-key hl-todo-mode-map (kbd "C-c C-h n") 'hl-todo-next)
 (define-key hl-todo-mode-map (kbd "C-c C-h p") 'hl-todo-previous)
 
+;; (maybe-require-package 'yafolding)
+;; (define-key yafolding-mode-map (kbd "<C-return>") nil)
+;; (define-key yafolding-mode-map (kbd "H-f") 'yafolding-toggle-element)
+;; yafolding glitched out hard on me
+;; (define-key hs-minor-mode-map (kbd "H-t") 'hs-toggle-hiding)
+
 ;; funny but not helpful
 ;; (require 'disable-mouse)
 ;; (global-disable-mouse-mode)
 
-(add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode))
 
 (set-fontset-font (frame-parameter nil 'font) 'han "xft:-GOOG-Noto Sans CJK KR-normal-normal-normal-*-16-*-*-*-*-0-iso10646-1")
 
-(maybe-require-package 'nov)
-
+(git-ensure-package "https://depp.brause.cc/nov.el.git" "nov.el")
+;; (setq nov-unzip-program "unzzip") ;;TODO figure out how to unzip
+;; (maybe-require-package 'nov)
+(add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode))
 ;; (add-to-list 'load-path "~/.emacs.d/addedPackages/ibus-el-0.3.2")
 ;; (require 'ibus)
 
@@ -419,6 +429,15 @@
 (yas-global-mode)
 ;; (define-key yas-minor-mode-map (kbd "C-c C-i ") 'yas-insert-snippet)
 
+(add-hook 'diary-list-entries-hook 'diary-sort-entries)
+(put 'set-goal-column 'disabled nil)
+
+(git-ensure-package "https://github.com/ryanswilson59/ob-wolfram" "ob-wolfram")
+
+;; (maybe-require-package 'edbi)
+
+
+
 (maybe-require-package 'diminish)
 (diminish 'eldoc-mode)
 (diminish 'racer-mode)
@@ -428,16 +447,8 @@
 (diminish 'helm-mode)
 (diminish 'yas-minor-mode)
 (diminish 'which-key-mode)
-(diminish 'rust-mode )
+(diminish 'cargo-minor-mode)
 
-(add-hook 'diary-list-entries-hook 'diary-sort-entries)
-(put 'set-goal-column 'disabled nil)
-
-(git-ensure-package "https://github.com/ryanswilson59/ob-wolfram" "ob-wolfram")
-
-;; (maybe-require-package 'edbi)
-
-
 (use-package avy
   :bind(( "C-;" . avy-goto-char)
 	( "C-j" . avy-goto-word-or-subword-1)
@@ -447,6 +458,7 @@
 (global-set-key (kbd "H-k") 'avy-kill-region)
 (global-set-key (kbd "H-y") 'avy-kill-ring-save-region)
 
+
 ;; TODO uncomment figure out what is going on with emacs 28
 (use-package latex
   :bind (:map LaTeX-mode-map ("C-j" . avy-goto-word-or-subword-1))
@@ -454,8 +466,7 @@
   :config (key-chord-define LaTeX-mode-map "qi" '(lambda () (interactive) (insert "\\")))
   :after (avy))
 
-;; TODO why is this not running first time
-(use-package nov-mode
+(use-package nov
   :bind (:map nov-mode-map
               ("C-d" . youdao-dictionary-search-at-point)
 	      ("d" . danish-dictionary-at-point)
@@ -499,7 +510,8 @@
 ;;--------------------------------------------------------------------------------
 ;; global binds
 ;;--------------------------------------------------------------------------------
-(global-set-key (kbd "H-d") 'delete-this-file)
+(global-set-key (kbd "H-d") 'hs-toggle-hiding)
+;; had this previously set to delete the file, a profoundly stupid idea
 (global-set-key (kbd "H-r") 'rename-this-file-and-buffer)
 
 (global-set-key "\M-n" "\C-u4\C-v")
