@@ -166,4 +166,25 @@ buffer is left unmodified."
         (t
          (error "Unrecognized option: %S" avy-all-windows))))
 
+;; emacs 27 handles resizing on its own, no need to check for the presence of imagemagick
+(defun nov-insert-image (path alt)
+  "Insert an image for PATH at point, falling back to ALT.
+This function honors `shr-max-image-proportion' if possible."
+  (cond
+   ((not (display-graphic-p))
+    (insert alt))
+   (t
+    ;; adapted from `shr-rescale-image'
+    (let ((edges (window-inside-pixel-edges
+                  (get-buffer-window (current-buffer)))))
+      (insert-image
+       (create-image path nil nil
+                     :ascent 100
+                     :max-width (truncate (* shr-max-image-proportion
+                                             (- (nth 2 edges)
+                                                (nth 0 edges))))
+                     :max-height (truncate (* shr-max-image-proportion
+                                              (- (nth 3 edges)
+                                                 (nth 1 edges))))))))))
+
 (provide 'patches)
