@@ -48,7 +48,7 @@
 (setq rust-match-angle-brackets nil)
 (setq exec-path(append exec-path '("~/.cargo/bin")))
 (setq racer-cmd "~/.cargo/bin/racer")
-(setq racer-rust-src-path "~/Desktop/source/rust/src/")
+(setq racer-rust-src-path "/usr/lib/rustlib/src/rust/library")
 
 (setq lsp-headerline-breadcrumb-enable nil)
 (setq lsp-modeline-diagnostics-enable nil)
