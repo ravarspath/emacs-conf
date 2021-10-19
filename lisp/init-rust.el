@@ -50,8 +50,9 @@
 (setq racer-cmd "~/.cargo/bin/racer")
 (setq racer-rust-src-path "/usr/lib/rustlib/src/rust/library")
 
+;;lsp has too many anti features
 (setq lsp-headerline-breadcrumb-enable nil)
 (setq lsp-modeline-diagnostics-enable nil)
-
+(setq lsp-signature-auto-activate nil)
 
 (provide 'init-rust)

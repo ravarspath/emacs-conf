@@ -249,8 +249,10 @@
 
 (maybe-require-package 'web-mode)
 (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.html.tera?\\'" . web-mode))
 (setq web-mode-engines-alist
-      '(("django"    . "\\.html\\'"))
+      '(("django"    . "\\.html\\'")
+	("django"    . "\\.tera\\'"))
       )
 (use-package web-mode
   :bind (:map web-mode-map
@@ -438,6 +440,7 @@
 
 
 
+;; TODO get this to run after mode load
 (maybe-require-package 'diminish)
 (diminish 'eldoc-mode)
 (diminish 'racer-mode)
@@ -448,6 +451,7 @@
 (diminish 'yas-minor-mode)
 (diminish 'which-key-mode)
 (diminish 'cargo-minor-mode)
+(diminish 'company-mode)
 
 (use-package avy
   :bind(( "C-;" . avy-goto-char)
@@ -475,11 +479,14 @@
 	      ("k" . next-line)
 	      ("l" . previous-line)
 	      ("g" . keyboard-quit)
-	      ("n" . scroll-up)
-	      ("p" . scroll-down)
-	      ("SPC" . set-mark-command)
+	      ("M-n" . scroll-up)
+	      ("SPC" . scroll-up)
+	      ("n" . "\C-u4\C-v")
+	      ("p" . "\C-u4\M-v")
+	      ;; ("SPC" . set-mark-command)
 	      ("q" . nil )
-	      ("C-q" . quit-window))
+	      ("C-q" . quit-window)
+	      ("s" . nov-save))
   :config (nov-after-load-patch)
   :init
   (add-hook 'nov-post-html-render-hook 'nov-center-text-after-render))

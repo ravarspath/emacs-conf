@@ -225,9 +225,18 @@ and will be used to save the associated image"
   (cond
    (nov-text-width
     (let* ((width (window-width))
-           (offset (truncate (* (- width nov-text-width) .5)))
+           (offset (- (truncate (* (- width nov-text-width) .5)) 6))
            (prepend (make-string offset ? )))
       (string-insert-rectangle (point-min) (point-max) prepend)))))
+
+(defun nov-save ()
+  (interactive)
+  "saves the current position"
+  (let ((identifier (cdr (assq 'identifier nov-metadata)))
+          (index (if (integerp nov-documents-index)
+                     nov-documents-index
+                   0)))
+      (nov-save-place identifier index (point))))
 
 ;;--------------------------------------------------------------------------------
 ;; titles usually self explanatory, not sure what i used them for
