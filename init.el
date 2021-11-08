@@ -459,11 +459,29 @@
 (global-set-key (kbd "H-k") 'avy-kill-region)
 (global-set-key (kbd "H-y") 'avy-kill-ring-save-region)
 
+(maybe-require-package 'magit)
+(use-package magit
+  :bind (( "C-t" . magit-section-cycle)))
+
+(defun mu-magit-kill-buffers (param)
+  "Restore window configuration and kill all Magit buffers."
+  (let ((buffers (magit-mode-get-buffers)))
+    (magit-restore-window-configuration)
+    (mapc #'kill-buffer buffers)))
+
+(setq magit-bury-buffer-function #'mu-magit-kill-buffers)
+
 
 ;; TODO uncomment figure out what is going on with emacs 28
 (use-package latex
   :bind (:map LaTeX-mode-map ("C-j" . avy-goto-word-or-subword-1))
   :bind (:map latex-mode-map ("C-j" . avy-goto-word-or-subword-1))
+  :bind (:map LaTeX-mode-map
+	      ("C-x C-s" . (lambda ()
+			   "Save the buffer and run `TeX-command-run-all`."
+			   (interactive)
+			   (save-buffer)
+			   (TeX-command-run-all nil))))
   :config (key-chord-define LaTeX-mode-map "qi" '(lambda () (interactive) (insert "\\")))
   :after (avy))
 
