@@ -154,10 +154,10 @@
 (key-chord-mode 1)
 
 (maybe-require-package 'jedi)
-(maybe-require-package 'company-anaconda)
+;; (maybe-require-package 'company-anaconda)
 (eval-after-load "company"
-  '(add-to-list 'company-backends 'company-anaconda))
-(add-hook 'python-mode-hook 'anaconda-mode)
+  '(add-to-list 'company-backends 'company-jedi))
+;; (add-hook 'python-mode-hook 'anaconda-mode)
 (add-hook 'python-mode-hook 'jedi:setup)
 (setq jedi:complete-on-dot t)
 (setq jedi:setup-keys t)
