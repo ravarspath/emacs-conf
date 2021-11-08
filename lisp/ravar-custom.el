@@ -236,7 +236,36 @@ and will be used to save the associated image"
           (index (if (integerp nov-documents-index)
                      nov-documents-index
                    0)))
-      (nov-save-place identifier index (point))))
+    (nov-save-place identifier index (point))))
+
+;; this allows nov to correctly render rubies, aka japanese pronunciation hints
+(defun shr-tag-rt (dom)
+  (let ((start (point)))
+    (shr-generic dom)
+    ;; (put-text-property start (point) 'display '(height .8))
+    (put-text-property start (point) 'display '(raise 0.4))
+    (add-face-text-property start (point) '(:height .8))))
+
+;; (defun my-nov-seg-japanese ()
+;;   (interactive)
+;;   (let* ((html (buffer-substring-no-properties
+;; 		(point-min) (point-max)))
+;; 	 (new-html
+;; 	  (with-temp-buffer
+;; 	    (call-process (append "/home/ryan/Desktop/code/jade/jcli" "$'" html "'") nil t )
+;; 	    (buffer-substring-no-properties
+;; 	     (point-min) (point-max)))))
+;;     (goto-char (point-min))
+;;     (insert new-html)
+;;     (delete-region (point) (point-max))))
+
+;;(add-hook 'nov-pre-html-render-hook 'my-nov-seg-japanese)
+(defun my-nov-seg-japanese ()
+  (interactive)
+  (call-process-region (point-min) (point-max)
+		       "/home/ryan/Desktop/code/jade/jcli"
+		       t
+		       t))
 
 ;;--------------------------------------------------------------------------------
 ;; titles usually self explanatory, not sure what i used them for
