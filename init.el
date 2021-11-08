@@ -204,8 +204,12 @@
 (add-hook 'eshell-mode-hook (lambda () (define-key eshell-mode-map (kbd "C-i") 'bash-completion-from-eshell )))
 
 
-
-;; (add-to-list 'load-path "~/.emacs.d/customModes/")
+(maybe-require-package 'flymake)
+(add-hook 'LaTeX-mode-hook 'flymake-mode)
+(use-package flymake
+  :bind (:map flymake-mode-map
+	      ("C-c C-," . 'flymake-goto-next-error)
+	      ("C-c C-." . 'flymake-goto-prev-error))) 
 
 (maybe-require-package 'auctex)
 ;; (require 'org-define-mode)
@@ -218,13 +222,6 @@
 (add-hook 'LaTeX-mode-hook 'visual-line-mode)
 (add-hook 'LaTeX-mode-hook 'flyspell-mode)
 (add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
-
-(maybe-require-package 'flymake)
-(add-hook 'LaTeX-mode-hook 'flymake-mode)
-(use-package flymake
-  :bind (:map flymake-mode-map
-	      ("C-c C-," . 'flymake-goto-next-error)
-	      ("C-c C-." . 'flymake-goto-prev-error))) 
 
 ;; (add-hook 'LaTeX-mode-hook 'turn-on-reftex)
 ;; (setq reftex-plug-into-AUCTeX t)
