@@ -237,7 +237,8 @@
 ;;TODO use this to use make with auctex
 ;; (eval-after-load "tex" '(add-to-list 'TeX-command-list
 ;; 				     '("Make" "make" TeX-run-compile nil t)))
-;;(setq latex-run-command "pdflatex")
+(setq latex-run-command "pdflatex")
+(setq-default TeX-master 'shared)
 ;; I think uses stock tex instead of auctex
 
 ;;not sure what this does when true, except breaks preview, unless fix from reddit
@@ -404,7 +405,8 @@
 (define-key elfeed-search-mode-map (kbd "C-l") 'elfeed-update)
 (define-key elfeed-search-mode-map (kbd "k") 'next-line)
 (define-key elfeed-search-mode-map (kbd "l") 'previous-line)
-(define-key elfeed-show-mode-map (kbd "<return>") 'shr-copy-url)
+;; (define-key elfeed-show-mode-map (kbd "<return>") 'shr-copy-url)
+(define-key elfeed-show-mode-map (kbd "<return>") 'browse-url)
 
 (maybe-require-package 'tabbar)
 (add-hook 'tabbar-mode-hook (lambda () (interactive) (remove-hook 'kill-buffer-hook 'tabbar-buffer-track-killed)))
@@ -434,6 +436,8 @@
 (git-ensure-package "https://github.com/ryanswilson59/ob-wolfram" "ob-wolfram")
 
 ;; (maybe-require-package 'edbi)
+
+;; (add-to-list 'load-path "~/.emacs.d/customModes/")
 
 
 
@@ -494,7 +498,7 @@
 	      ("k" . next-line)
 	      ("l" . previous-line)
 	      ("g" . keyboard-quit)
-	      ("M-n" . scroll-up)
+	      ("M-n" . scroll-down)
 	      ("SPC" . scroll-up)
 	      ("n" . "\C-u4\C-v")
 	      ("p" . "\C-u4\M-v")
@@ -505,6 +509,12 @@
   :config (nov-after-load-patch)
   :init
   (add-hook 'nov-post-html-render-hook 'nov-center-text-after-render))
+
+;;   (add-hook 'nov-pre-html-render-hook 'my-nov-pre-ruby-hook)
+;;   (add-hook 'nov-post-html-render-hook 'my-nov-shrink-rubies)
+;; (remove-hook 'nov-post-html-render-hook 'nov-center-text-after-render)
+
+
 (setq nov-variable-pitch nil)
 
 
