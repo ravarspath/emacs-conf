@@ -55,6 +55,8 @@
 (linum-mode t)
 
 (desktop-save-mode 1)
+(setq desktop-path '("." "~/.emacs.d/"))
+
 (auto-revert-mode)
 
 (tool-bar-mode -1)
