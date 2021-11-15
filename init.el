@@ -498,14 +498,12 @@
 
 ;; TODO uncomment figure out what is going on with emacs 28
 (use-package latex
-  :bind (:map LaTeX-mode-map ("C-j" . avy-goto-word-or-subword-1))
-  :bind (:map latex-mode-map ("C-j" . avy-goto-word-or-subword-1))
-  :bind (:map LaTeX-mode-map
-	      ("C-x C-s" . (lambda ()
+  :bind (:map LaTeX-mode-map (("C-x C-s" . (lambda ()
 			   "Save the buffer and run `TeX-command-run-all`."
 			   (interactive)
 			   (save-buffer)
-			   (TeX-command-run-all nil))))
+			   (TeX-command-run-all nil)))
+			      ("C-j" . avy-goto-word-or-subword-1)))
   :config (key-chord-define LaTeX-mode-map "qi" '(lambda () (interactive) (insert "\\")))
   :after (avy))
 
