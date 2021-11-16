@@ -96,6 +96,21 @@
 (put 'text-mode 'flyspell-mode-predicate 'flyspell-ignore-abbrev)
 
 ;;--------------------------------------------------------------------------------
+;; prevent auctex from removing focus from active tex buffer after save
+;;--------------------------------------------------------------------------------
+
+(defun frame-return--advice (fun &res r)
+  (let (frame (selected-frame))
+    (progn
+      (apply fun r)
+      (select-frame-set-input-focus frame))))
+
+(add-function :around (symbol-function 'TeX-region-update-point)
+	      #'frame-return--advice)
+(add-function :around (symbol-function 'TeX-region-update)
+	      #'frame-return--advice)
+
+;;--------------------------------------------------------------------------------
 ;; not really used, this is an attempt to make navigating latex nicer
 ;;--------------------------------------------------------------------------------
 (defun avy-jump-open ()
