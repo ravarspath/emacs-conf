@@ -466,16 +466,18 @@
 
 ;; TODO get this to run after mode load
 (maybe-require-package 'diminish)
-(diminish 'eldoc-mode)
-(diminish 'racer-mode)
-(diminish 'disable-mouse-mode)
-(diminish 'disable-mouse-global-mode)
-(diminish 'projectile-mode)
-(diminish 'helm-mode)
-(diminish 'yas-minor-mode)
-(diminish 'which-key-mode)
-(diminish 'cargo-minor-mode)
-(diminish 'company-mode)
+
+(progn
+  (diminish 'eldoc-mode)
+  (diminish 'racer-mode)
+  (diminish 'disable-mouse-mode)
+  (diminish 'disable-mouse-global-mode)
+  (diminish 'projectile-mode)
+  (diminish 'helm-mode)
+  (diminish 'yas-minor-mode)
+  (diminish 'which-key-mode)
+  (diminish 'cargo-minor-mode)
+  (diminish 'company-mode))
 
 (use-package avy
   :bind(( "C-;" . avy-goto-char)
