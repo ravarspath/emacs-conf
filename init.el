@@ -428,6 +428,9 @@
 ;; (define-key elfeed-show-mode-map (kbd "<return>") 'shr-copy-url)
 (define-key elfeed-show-mode-map (kbd "<return>") 'browse-url)
 
+;;https://robert.kra.hn/posts/2021-02-07_rust-with-emacs/
+;; to use dap with rust you need some extra stuff
+
 (maybe-require-package 'tabbar)
 (add-hook 'tabbar-mode-hook (lambda () (interactive) (remove-hook 'kill-buffer-hook 'tabbar-buffer-track-killed)))
 (remove-hook 'kill-buffer-hook 'tabbar-buffer-track-killed)
