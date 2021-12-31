@@ -619,7 +619,7 @@
 (require 'ravar-custom)
 
 (global-set-key (kbd "C-<f2>") 'multi-occur-in-this-mode)
-(global-set-key [f6] 'revert-this-buffer)
+(global-set-key [f5] 'revert-this-buffer)
 (global-set-key (kbd "M-J") 'move-temp-del)
 (require 'youdao-dictionary)
 (define-key youdao-dictionary-mode-map (kbd "i") 'youdao-extract)

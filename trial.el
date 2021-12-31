@@ -46,3 +46,24 @@
          :console "external"
          :dap-compilation "cargo build"
          :dap-compilation-dir "${workspaceFolder}")))
+
+
+(dap-mode 1)
+(dap-ui-mode)
+(dap-ui-controls-mode 1)
+(require 'dap-gdb-lldb)
+
+(dap-register-debug-template "Rust::GDB Run Configuration"
+                             (list :type "gdb"
+                                   :request "launch"
+                                   :name "GDB::Run"
+				   :MIMode "gdb"
+				   :miDebuggerPath "rust-gdb"
+                                   :target nil
+                                   :cwd nil))
+
+(global-set-key [C-f6] 'gud-break)
+(global-set-key [f6] 'gud-tbreak)
+(global-set-key [f7] 'gud-next)
+(global-set-key [f8] 'gud-step)
+(global-set-key [f9] 'gud-cont)
